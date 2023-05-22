@@ -1,0 +1,18 @@
+# Dockerfile for setting up d2dtracker dependecies
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+#
+# Install yolov8 dependencies
+# 
+# RUN pip3 install opencv-python
+RUN pip3 install ultralytics
+RUN apt install ros-humble-vision-msgs -y \
+	&& apt-get clean autoclean \
+	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
+# Copy scripts
+RUN mkdir -p /usr/local/bin/scripts
+COPY scripts/workspace-entrypoint.sh /usr/local/bin/scripts/
+RUN  chmod +x /usr/local/bin/scripts/*.sh
