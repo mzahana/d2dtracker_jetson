@@ -79,9 +79,14 @@ fi
 #
 # Setup the udev rules of Realsense camera
 echo "Setting up Realsense udev rules ..." && sleep 1
-cd /tmp && \
-git clone https://github.com/IntelRealSense/librealsense && \
-cd librealsense && \
+if [ ! -d "/tmp/librealsense" ]; then
+    cd /tmp
+    git clone https://github.com/IntelRealSense/librealsense 
+else
+    cd /tmp/librealsense
+    git pull origin master
+fi
+cd /tmp/librealsense && \
 ./scripts/setup_udev_rules.sh
 
 #
@@ -89,6 +94,7 @@ cd librealsense && \
 #
 echo "Cloning realsense-ros ... " && sleep 1
 if [ ! -d "$ISAAC_ROS_WS/src/realsense-ros" ]; then
+    cd $ISAAC_ROS_WS/src
     git clone https://github.com/IntelRealSense/realsense-ros.git -b 4.51.1
 else
     cd $ISAAC_ROS_WS/src/realsense-ros
@@ -96,10 +102,11 @@ else
 fi
 
 echo "Confgiuring container..." && sleep 1
-cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 if [ -f "$ISAAC_ROS_WS/src/isaac_ros_common/scripts/.isaac_ros_common-config" ]; then
+    cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
     rm .isaac_ros_common-config
 fi
+cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 touch .isaac_ros_common-config && \
 echo CONFIG_IMAGE_KEY=ros2_humble.realsense > .isaac_ros_common-config
 
