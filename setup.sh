@@ -16,7 +16,7 @@ git lfs install --skip-repo
 echo "Create ROS workspace at $HOME/workspaces "
 sleep 1
 
-if [ ! -d "$HOME/workspaces"]; then
+if [ ! -d "$HOME/workspaces" ]; then
     mkdir -p $HOME/workspaces/isaac_ros-dev/src
 fi
 
