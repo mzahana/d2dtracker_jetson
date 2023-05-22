@@ -24,7 +24,7 @@ else
     echo "ISAAC_ROS_WS is already exported .bashrc file. No changes made."
 fi
 
-export ISAAC_ROS_WS=\${HOME}/workspaces/isaac_ros-dev/
+export ISAAC_ROS_WS=${HOME}/workspaces/isaac_ros-dev
 
 
 echo "Create ROS workspace at $HOME/workspaces "
