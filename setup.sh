@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
-sudo cp scripts/daemon.json /etc/docker/daemon.json
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+sudo cp $ROOT/scripts/daemon.json /etc/docker/daemon.json
 echo && echo "daemon.json is copied to /etc/docker/daemon.json" && echo
 sleep 1
 
@@ -108,9 +110,17 @@ if [ -f "$ISAAC_ROS_WS/src/isaac_ros_common/scripts/.isaac_ros_common-config" ];
 fi
 cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 touch .isaac_ros_common-config && \
-echo CONFIG_IMAGE_KEY=ros2_humble.realsense > .isaac_ros_common-config
+echo CONFIG_IMAGE_KEY=ros2_humble.realsense.d2dtracker > .isaac_ros_common-config
 
 
+echo "Copying run_d2dtracker.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
+cp $ROOT/scripts/run_d2dtracker.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+
+echo "Copying Dockerfile.d2dtracker to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
+cp $ROOT/docker/Dockerfile.d2dtracker $ISAAC_ROS_WS/src/isaac_ros_common/docker/
+
+echo "Copying modified-workspace-entrypoint.sh to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
+cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
 
 bashrc_file="$HOME/.bashrc"
 line_to_check="alias isaac_ros_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_dev.sh'"
@@ -122,6 +132,19 @@ else
     echo "isaac_ros_container alias already exists in .bashrc file. No changes made."
 fi
 
+bashrc_file="$HOME/.bashrc"
+line_to_check="alias d2dtracker_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_d2dtracker.sh'"
+
+if ! grep -qF "$line_to_check" "$bashrc_file"; then
+    echo "$line_to_check" >> "$bashrc_file"
+    echo "d2dtracker_container alias added to .bashrc file."
+else
+    echo "d2dtracker_container alias already exists in .bashrc file. No changes made."
+fi
+
+source $HOME/.bashrc
+
+echo "Execute d2dtracker_container to start the d2dtracker-container"
 
 # Copy custom Dockerfile for MicroAgent and d2dtracker pkgs
 # Set the $CONFIG_IMAGE_KEY in isaac_ros_common/scripts/.isaac_ros_common-config

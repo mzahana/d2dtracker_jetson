@@ -93,14 +93,25 @@ fi
 PLATFORM="$(uname -m)"
 
 BASE_NAME="isaac_ros_dev-$PLATFORM"
-CONTAINER_NAME="$BASE_NAME-container"
+# CONTAINER_NAME="$BASE_NAME-container"
+CONTAINER_NAME="d2dtracker-container"
 
 # Remove any exited containers.
 # if [ "$(docker ps -a --quiet --filter status=exited --filter name=$CONTAINER_NAME)" ]; then
 #     docker rm $CONTAINER_NAME > /dev/null
 # fi
 
-CMD="/bin/bash"
+CMD="export DEV_DIR=/workspaces && \
+        source /workspaces/ros2_ws/install/setup.bash && \
+        source /workspaces/isaac_ros-dev/install/setup.bash && \
+         /bin/bash"
+if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
+    CMD="export GIT_USER=$GIT_USER && export GIT_TOKEN=$GIT_TOKEN && $CMD"
+fi
+
+if [[ -n "$SUDO_PASSWORD" ]]; then
+    CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
+fi
 # Re-use existing container.
 # if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
 #     print_info "Attaching to running container: $CONTAINER_NAME"
@@ -181,7 +192,30 @@ if [[ -f "$DOCKER_ARGS_FILE" ]]; then
 fi
 
 # Custom command to run after logging into the container
-CMD="/bin/bash"
+CMD="export DEV_DIR=/workspaces &&\
+        if [ ! -d "/workspaces/ros2_ws" ]; then
+            mkdir -p /workspaces/ros2_ws/src
+        fi &&\
+        if [ ! -d "/workspaces/ros2_ws/src/d2dtracker_system" ]; then
+            cd /workspaces/ros2_ws/src
+            git clone https://github.com/mzahana/d2dtracker_system.git
+        fi &&\
+        cd /workspaces/ros2_ws/src/d2dtracker_system &&\
+        ./setup.sh && cd \$DEV_DIR &&\
+        cd /workspaces/isaac_ros-dev && colcon build && \
+        source /workspaces/ros2_ws/install/setup.bash &&\
+        source /workspaces/isaac_ros-dev/install/setup.bash && \
+        /bin/bash"
+
+if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
+    CMD="export GIT_USER=$GIT_USER && export GIT_TOKEN=$GIT_TOKEN && $CMD"
+fi
+
+if [[ -n "$SUDO_PASSWORD" ]]; then
+    CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
+fi
+
+DEV_DIR=$HOME/workspaces
 # Run container from image
 print_info "Running $CONTAINER_NAME"
 docker run -it \
@@ -189,13 +223,14 @@ docker run -it \
     --network host \
     ${DOCKER_ARGS[@]} \
     -v $ISAAC_ROS_DEV_DIR:/workspaces/isaac_ros-dev \
+    -v $DEV_DIR:/workspaces \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
     --user="admin" \
     --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
-    --workdir /workspaces/isaac_ros-dev \
+    --workdir /workspaces \
     $@ \
     $BASE_NAME \
     bash -c "${CMD}"
