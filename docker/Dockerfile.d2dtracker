@@ -26,5 +26,5 @@ RUN pip3 install ultralytics
 
 # Copy scripts
 RUN mkdir -p /usr/local/bin/scripts
-COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/workspace-entrypoint.sh
+COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/
 RUN  chmod +x /usr/local/bin/scripts/*.sh

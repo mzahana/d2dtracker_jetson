@@ -239,7 +239,7 @@ docker run -it \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
     --user="admin" \
-    --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
+    --entrypoint /usr/local/bin/scripts/modified-workspace-entrypoint.sh \
     --workdir /workspaces \
     $@ \
     $BASE_NAME \
