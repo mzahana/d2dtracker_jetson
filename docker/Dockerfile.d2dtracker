@@ -20,9 +20,9 @@ RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
 # 
 # RUN pip3 install opencv-python
 RUN pip3 install ultralytics
-RUN apt install ros-humble-vision-msgs -y \
-	&& apt-get clean autoclean \
-	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+# RUN apt install ros-humble-vision-msgs -y \
+# 	&& apt-get clean autoclean \
+# 	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
 # Copy scripts
 RUN mkdir -p /usr/local/bin/scripts
