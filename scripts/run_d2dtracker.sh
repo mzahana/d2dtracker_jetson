@@ -118,9 +118,19 @@ fi
 #     docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME /bin/bash $@
 #     exit 0
 # fi
-if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
-    print_info "Attaching to running container: $CONTAINER_NAME"
-    docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME bash -c "${CMD}"
+# if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
+#     print_info "Attaching to running container: $CONTAINER_NAME"
+#     docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME bash -c "${CMD}"
+#     exit 0
+# fi
+
+if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
+    if [ "$(docker ps -aq -f status=exited -f name=${CONTAINER_NAME})" ]; then
+        # cleanup
+        echo "Restarting the container..."
+        docker start ${CONTAINER_NAME}
+    fi
+    docker exec --user admin -it --workdir /workspaces ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
     exit 0
 fi
 
