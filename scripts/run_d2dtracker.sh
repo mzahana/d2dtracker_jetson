@@ -159,9 +159,8 @@ CMD="export DEV_DIR=/workspaces &&\
         if [ ! -d "/workspaces/ros2_ws/src/d2dtracker_system" ]; then
             cd /workspaces/ros2_ws/src
             git clone https://github.com/mzahana/d2dtracker_system.git
+            cd /workspaces/ros2_ws/src/d2dtracker_system && ./setup.sh
         fi &&\
-        cd /workspaces/ros2_ws/src/d2dtracker_system &&\
-        ./setup.sh && cd \$DEV_DIR &&\
         cd /workspaces/isaac_ros-dev && colcon build --symlink-install && \
         source /workspaces/ros2_ws/install/setup.bash &&\
         source /workspaces/isaac_ros-dev/install/setup.bash && \
