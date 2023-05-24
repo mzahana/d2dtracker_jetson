@@ -1,16 +1,17 @@
 #!/bin/bash -e
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $ROOT/utils/print_color.sh
 
 sudo cp $ROOT/scripts/daemon.json /etc/docker/daemon.json
-echo && echo "daemon.json is copied to /etc/docker/daemon.json" && echo
+print_info "daemon.json is copied to /etc/docker/daemon.json"
 sleep 1
 
-echo "Reloading docker ..."
+print_info "Reloading docker ..."
 sleep 1
 sudo systemctl daemon-reload && sudo systemctl restart docker
 
-echo "Install Git LFS in order to pull down all large files..."
+print_info "Install Git LFS in order to pull down all large files..."
 sleep 1
 sudo apt-get install git-lfs -y
 git lfs install --skip-repo
@@ -21,9 +22,9 @@ line_to_check="export ISAAC_ROS_WS=\${HOME}/workspaces/isaac_ros-dev/"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    echo "ISAAC_ROS_WS is exported to .bashrc file."
+    print_info "ISAAC_ROS_WS is exported to .bashrc file."
 else
-    echo "ISAAC_ROS_WS is already exported .bashrc file. No changes made."
+    print_warning "ISAAC_ROS_WS is already exported .bashrc file. No changes made."
 fi
 
 export ISAAC_ROS_WS=${HOME}/workspaces/isaac_ros-dev
@@ -39,7 +40,7 @@ if [ ! -d "$HOME/workspaces/isaac_ros-dev" ]; then
     mkdir -p $HOME/workspaces/isaac_ros-dev/src
 fi
 
-echo "Cloning Nvidia ROS packages ..."
+print_info "Cloning Nvidia ROS packages ..."
 sleep 1
 
 #
@@ -49,7 +50,7 @@ if [ ! -d "$ISAAC_ROS_WS/src/isaac_ros_visual_slam" ]; then
     cd $ISAAC_ROS_WS/src
     git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_visual_slam
 else
-    echo "Pulling latest isaac_ros_visual_slam..." && sleep 1
+    print_info "Pulling latest isaac_ros_visual_slam..." && sleep 1
     cd $ISAAC_ROS_WS/src/isaac_ros_visual_slam
     git pull origin main
 fi
@@ -61,7 +62,7 @@ if [ ! -d "$ISAAC_ROS_WS/src/isaac_ros_common" ]; then
     cd $ISAAC_ROS_WS/src
     git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common
 else
-    echo "Pulling latest isaac_ros_common..." && sleep 1
+    print_info "Pulling latest isaac_ros_common..." && sleep 1
     cd $ISAAC_ROS_WS/src/isaac_ros_common
     git pull origin main
 fi
@@ -73,7 +74,7 @@ if [ ! -d "$ISAAC_ROS_WS/src/isaac_ros_nitros" ]; then
     cd $ISAAC_ROS_WS/src
     git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_nitros
 else
-    echo "Pulling latest isaac_ros_nitros..." && sleep 1
+    print_info "Pulling latest isaac_ros_nitros..." && sleep 1
     cd $ISAAC_ROS_WS/src/isaac_ros_nitros
     git pull origin main
 fi
@@ -94,7 +95,7 @@ cd /tmp/librealsense && \
 #
 # Clone realsense-ros 4.51.1
 #
-echo "Cloning realsense-ros ... " && sleep 1
+print_info "Cloning realsense-ros ... " && sleep 1
 if [ ! -d "$ISAAC_ROS_WS/src/realsense-ros" ]; then
     cd $ISAAC_ROS_WS/src
     git clone https://github.com/IntelRealSense/realsense-ros.git -b 4.51.1
@@ -103,36 +104,39 @@ else
     git checkout 4.51.1
 fi
 
-echo "Confgiuring container..." && sleep 1
+print_info "Confgiuring container..." && sleep 1
 if [ -f "$ISAAC_ROS_WS/src/isaac_ros_common/scripts/.isaac_ros_common-config" ]; then
     cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
     rm .isaac_ros_common-config
 fi
 cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 touch .isaac_ros_common-config && \
-echo CONFIG_IMAGE_KEY=ros2_humble.realsense.d2dtracker > .isaac_ros_common-config
+print_info CONFIG_IMAGE_KEY=ros2_humble.realsense.d2dtracker > .isaac_ros_common-config
 
-
-echo "Copying run_d2dtracker.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
+# run_d2dtracker.sh
+print_info "Copying run_d2dtracker.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
 cp $ROOT/scripts/run_d2dtracker.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 
-echo "Copying Dockerfile.d2dtracker to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
+# Dockerfile.d2dtracker
+print_info "Copying Dockerfile.d2dtracker to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
 cp $ROOT/docker/Dockerfile.d2dtracker $ISAAC_ROS_WS/src/isaac_ros_common/docker/
 
-echo "Copying modified-workspace-entrypoint.sh to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
-cp $ROOT/scripts/build_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
-
-echo "Copying build_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
+# modified-workspace-entrypoint.sh 
+print_info "Copying modified-workspace-entrypoint.sh to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
 cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
+
+# build_d2dtracker_image.sh
+print_info "Copying build_d2dtracker_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
+cp $ROOT/scripts/build_d2dtracker_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 
 bashrc_file="$HOME/.bashrc"
 line_to_check="alias isaac_ros_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_dev.sh'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    echo "isaac_ros_container alias added to .bashrc file."
+    print_info "isaac_ros_container alias added to .bashrc file."
 else
-    echo "isaac_ros_container alias already exists in .bashrc file. No changes made."
+    print_warning "isaac_ros_container alias already exists in .bashrc file. No changes made."
 fi
 
 bashrc_file="$HOME/.bashrc"
@@ -140,9 +144,9 @@ line_to_check="alias d2dtracker_container='. $ISAAC_ROS_WS/src/isaac_ros_common/
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    echo "d2dtracker_container alias added to .bashrc file."
+    print_info "d2dtracker_container alias added to .bashrc file."
 else
-    echo "d2dtracker_container alias already exists in .bashrc file. No changes made."
+    print_warning "d2dtracker_container alias already exists in .bashrc file. No changes made."
 fi
 
 bashrc_file="$HOME/.bashrc"
@@ -150,15 +154,11 @@ line_to_check="alias build_d2dtracker_image='. $ISAAC_ROS_WS/src/isaac_ros_commo
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    echo "build_d2dtracker_image alias added to .bashrc file."
+    print_info "build_d2dtracker_image alias added to .bashrc file."
 else
-    echo "build_d2dtracker_image alias already exists in .bashrc file. No changes made."
+    print_warning "build_d2dtracker_image alias already exists in .bashrc file. No changes made."
 fi
 
 source $HOME/.bashrc
 
-echo "Execute d2dtracker_container to start the d2dtracker-container"
-
-# Copy custom Dockerfile for MicroAgent and d2dtracker pkgs
-# Set the $CONFIG_IMAGE_KEY in isaac_ros_common/scripts/.isaac_ros_common-config
-# Copy the modified run_dev.sh file
+print_info "Execute d2dtracker_container to start the d2dtracker-container"
