@@ -111,7 +111,7 @@ if [ -f "$ISAAC_ROS_WS/src/isaac_ros_common/scripts/.isaac_ros_common-config" ];
 fi
 cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 touch .isaac_ros_common-config && \
-print_info CONFIG_IMAGE_KEY=ros2_humble.realsense.d2dtracker > .isaac_ros_common-config
+echo CONFIG_IMAGE_KEY=ros2_humble.realsense.d2dtracker > .isaac_ros_common-config
 
 # run_d2dtracker.sh
 print_info "Copying run_d2dtracker.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
