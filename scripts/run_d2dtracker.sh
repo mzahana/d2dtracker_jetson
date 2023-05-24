@@ -162,7 +162,7 @@ CMD="export DEV_DIR=/workspaces &&\
         fi &&\
         cd /workspaces/ros2_ws/src/d2dtracker_system &&\
         ./setup.sh && cd \$DEV_DIR &&\
-        cd /workspaces/isaac_ros-dev && colcon build && \
+        cd /workspaces/isaac_ros-dev && colcon build --symlink-install && \
         source /workspaces/ros2_ws/install/setup.bash &&\
         source /workspaces/isaac_ros-dev/install/setup.bash && \
         /bin/bash"
