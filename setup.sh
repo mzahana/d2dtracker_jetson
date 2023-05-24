@@ -120,6 +120,9 @@ echo "Copying Dockerfile.d2dtracker to $ISAAC_ROS_WS/src/isaac_ros_common/docker
 cp $ROOT/docker/Dockerfile.d2dtracker $ISAAC_ROS_WS/src/isaac_ros_common/docker/
 
 echo "Copying modified-workspace-entrypoint.sh to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
+cp $ROOT/scripts/build_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+
+echo "Copying build_image.sh.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
 cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
 
 bashrc_file="$HOME/.bashrc"

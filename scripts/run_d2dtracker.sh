@@ -16,14 +16,6 @@ function usage() {
     print_info "Copyright (c) 2021-2022, NVIDIA CORPORATION."
 }
 
-# Read and parse config file if exists
-#
-# CONFIG_IMAGE_KEY (string, can be empty)
-
-if [[ -f "${ROOT}/.isaac_ros_common-config" ]]; then
-    . "${ROOT}/.isaac_ros_common-config"
-fi
-
 ISAAC_ROS_DEV_DIR="$1"
 if [[ -z "$ISAAC_ROS_DEV_DIR" ]]; then
     ISAAC_ROS_DEV_DIR="$HOME/workspaces/isaac_ros-dev"
@@ -71,39 +63,20 @@ if [[ -z "$(docker ps)" ]] ;  then
     exit 1
 fi
 
-# Check if git-lfs is installed.
-if [[ -z "$(git lfs)" ]] ; then
-    print_error "git-lfs is not insalled. Please make sure git-lfs is installed before you clone the repo."
-    exit 1
-fi
-
-# Check if all LFS files are in place
-git rev-parse &>/dev/null
-if [[ $? -eq 0 ]]; then
-    LFS_FILES_STATUS=$(cd $ISAAC_ROS_DEV_DIR && git lfs ls-files | cut -d ' ' -f2)
-    for (( i=0; i<${#LFS_FILES_STATUS}; i++ )); do
-        f="${LFS_FILES_STATUS:$i:1}"
-        if [[ "$f" == "-" ]]; then
-            print_error "LFS files are missing. Please re-clone the repo after installing git-lfs."
-            exit 1
-        fi
-    done
-fi
-
 PLATFORM="$(uname -m)"
 
 BASE_NAME="isaac_ros_dev-$PLATFORM"
 # CONTAINER_NAME="$BASE_NAME-container"
 CONTAINER_NAME="d2dtracker-container"
 
-# Remove any exited containers.
-# if [ "$(docker ps -a --quiet --filter status=exited --filter name=$CONTAINER_NAME)" ]; then
-#     docker rm $CONTAINER_NAME > /dev/null
-# fi
 
 CMD="export DEV_DIR=/workspaces && \
-        source /workspaces/ros2_ws/install/setup.bash && \
-        source /workspaces/isaac_ros-dev/install/setup.bash && \
+        if [[ -f "/workspaces/ros2_ws/install/setup.bash" ]]; then
+            source /workspaces/ros2_ws/install/setup.bash
+        fi && \
+        if [[ -f "/workspaces/isaac_ros-dev/install/setup.bash" ]]; then
+            source source /workspaces/isaac_ros-dev/install/setup.bash
+        fi && \
          /bin/bash"
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
     CMD="export GIT_USER=$GIT_USER && export GIT_TOKEN=$GIT_TOKEN && $CMD"
@@ -134,29 +107,6 @@ if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
     exit 0
 fi
 
-# Build image
-IMAGE_KEY=ros2_humble
-if [[ ! -z "${CONFIG_IMAGE_KEY}" ]]; then
-    IMAGE_KEY=$CONFIG_IMAGE_KEY
-fi
-
-BASE_IMAGE_KEY=$PLATFORM.user
-if [[ ! -z "${IMAGE_KEY}" ]]; then
-    BASE_IMAGE_KEY=$PLATFORM.$IMAGE_KEY
-
-    # If the configured key does not have .user, append it last
-    if [[ $IMAGE_KEY != *".user"* ]]; then
-        BASE_IMAGE_KEY=$BASE_IMAGE_KEY.user
-    fi
-fi
-
-print_info "Building $BASE_IMAGE_KEY base as image: $BASE_NAME using key $BASE_IMAGE_KEY"
-$ROOT/build_base_image.sh $BASE_IMAGE_KEY $BASE_NAME '' '' ''
-
-if [ $? -ne 0 ]; then
-    print_error "Failed to build base image: $BASE_NAME, aborting."
-    exit 1
-fi
 
 # Map host's display socket to docker
 DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
@@ -225,7 +175,7 @@ if [[ -n "$SUDO_PASSWORD" ]]; then
     CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
 fi
 
-DEV_DIR=$HOME/workspaces
+HOST_DEV_DIR=$HOME/workspaces
 # Run container from image
 print_info "Running $CONTAINER_NAME"
 docker run -it \
@@ -233,7 +183,7 @@ docker run -it \
     --network host \
     ${DOCKER_ARGS[@]} \
     -v $ISAAC_ROS_DEV_DIR:/workspaces/isaac_ros-dev \
-    -v $DEV_DIR:/workspaces \
+    -v $HOST_DEV_DIR:/workspaces \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
