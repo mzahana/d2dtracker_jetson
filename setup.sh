@@ -167,7 +167,7 @@ if ! grep -qF "$line_to_check" "$bashrc_file"; then
 else
     print_warning "build_d2dtracker_image alias already exists in .bashrc file. No changes made."
 fi
-cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts && ./build_base_image.sh
+cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts && ./build_d2dtracker_image.sh
 
 source $HOME/.bashrc
 
