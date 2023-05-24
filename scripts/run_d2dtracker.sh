@@ -152,18 +152,25 @@ if [[ -f "$DOCKER_ARGS_FILE" ]]; then
 fi
 
 # Custom command to run after logging into the container
-CMD="export DEV_DIR=/workspaces &&\
+CMD="export DEV_DIR=/workspaces && \
         if [ ! -d "/workspaces/ros2_ws" ]; then
             mkdir -p /workspaces/ros2_ws/src
-        fi &&\
+        fi && \
         if [ ! -d "/workspaces/ros2_ws/src/d2dtracker_system" ]; then
             cd /workspaces/ros2_ws/src
             git clone https://github.com/mzahana/d2dtracker_system.git
             cd /workspaces/ros2_ws/src/d2dtracker_system && ./setup.sh
-        fi &&\
-        cd /workspaces/isaac_ros-dev && colcon build --symlink-install && \
-        source /workspaces/ros2_ws/install/setup.bash &&\
-        source /workspaces/isaac_ros-dev/install/setup.bash && \
+        fi && \
+        if [ ! -d "/workspaces/ros2_ws/install" ]; then
+            cd /workspaces/ros2_ws/ && colon build
+        fi && \
+        source /workspaces/ros2_ws/install/setup.bash && \
+        if [ -d "/workspaces/isaac_ros-dev/src" ]; then
+            if [ ! -d "/workspaces/isaac_ros-dev/install" ]; then
+                cd /workspaces/isaac_ros-dev && colcon build
+            fi
+            source /workspaces/isaac_ros-dev/install/setup.bash
+        fi && \
         /bin/bash"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
