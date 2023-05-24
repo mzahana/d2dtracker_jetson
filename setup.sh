@@ -145,6 +145,16 @@ else
     echo "d2dtracker_container alias already exists in .bashrc file. No changes made."
 fi
 
+bashrc_file="$HOME/.bashrc"
+line_to_check="alias build_d2dtracker_image='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/build_d2dtracker_image.sh'"
+
+if ! grep -qF "$line_to_check" "$bashrc_file"; then
+    echo "$line_to_check" >> "$bashrc_file"
+    echo "build_d2dtracker_image alias added to .bashrc file."
+else
+    echo "build_d2dtracker_image alias already exists in .bashrc file. No changes made."
+fi
+
 source $HOME/.bashrc
 
 echo "Execute d2dtracker_container to start the d2dtracker-container"

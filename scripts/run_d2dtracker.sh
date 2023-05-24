@@ -191,6 +191,5 @@ docker run -it \
     --user="admin" \
     --entrypoint /usr/local/bin/scripts/modified-workspace-entrypoint.sh \
     --workdir /workspaces \
-    $@ \
     $BASE_NAME \
     bash -c "${CMD}"
