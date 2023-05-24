@@ -129,6 +129,15 @@ cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_co
 print_info "Copying build_d2dtracker_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
 cp $ROOT/scripts/build_d2dtracker_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 
+if [[ ! -d "$ISAAC_ROS_WS/src/isaac_ros_common/docker/libs"  ]]; then
+    cd $ISAAC_ROS_WS/src/isaac_ros_common/docker && mkdir libs
+fi
+
+print_info "Copying nvToolsExt.h"
+cp $ROOT/libs/nvToolsExt.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+print_info "Copying libnvToolsExt.so"
+cp $ROOT/libs/libnvToolsExt.so $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+
 bashrc_file="$HOME/.bashrc"
 line_to_check="alias isaac_ros_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_dev.sh'"
 
