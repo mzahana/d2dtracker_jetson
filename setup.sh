@@ -33,10 +33,12 @@ export ISAAC_ROS_WS=${HOME}/workspaces/isaac_ros-dev
 echo "Create ROS workspace at $HOME/workspaces "
 sleep 1
 if [ ! -d "$HOME/workspaces" ]; then
+    print_info "Creating $HOME/workspaces/isaac_ros-dev/src" && sleep 1
     mkdir -p $HOME/workspaces/isaac_ros-dev/src
 fi
 
 if [ ! -d "$HOME/workspaces/isaac_ros-dev" ]; then
+    print_info "Creating $HOME/workspaces/isaac_ros-dev/src" && sleep 1
     mkdir -p $HOME/workspaces/isaac_ros-dev/src
 fi
 
