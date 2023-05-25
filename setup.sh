@@ -106,7 +106,7 @@ else
     git checkout 4.51.1
 fi
 
-print_info "Confgiuring container..." && sleep 1
+print_info "Configuring container..." && sleep 1
 if [ -f "$ISAAC_ROS_WS/src/isaac_ros_common/scripts/.isaac_ros_common-config" ]; then
     cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
     rm .isaac_ros_common-config
