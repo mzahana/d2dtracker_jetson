@@ -75,7 +75,7 @@ CMD="export DEV_DIR=/workspaces && \
             source /workspaces/ros2_ws/install/setup.bash
         fi && \
         if [[ -f "/workspaces/isaac_ros-dev/install/setup.bash" ]]; then
-            source source /workspaces/isaac_ros-dev/install/setup.bash
+            source /workspaces/isaac_ros-dev/install/setup.bash
         fi && \
          /bin/bash"
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
