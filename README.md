@@ -28,6 +28,8 @@ source $HOME/.bashrc
 d2dtracker_container
 ```
 * `d2dtracker_container` is an alias that is created by the `setup.sh` script and written to `$HOME/.bashrc` to easily access the container.
+* Running the `d2dtracker_container` for the first time will take some time to clone repositories
+* You can use the same `d2dtracker_container` alias in multiple terminals to access the same container's terminal
 
 # Setup (to be removed)
 * It is HIGHLY recommended to install an SSD on your Jetson device.
