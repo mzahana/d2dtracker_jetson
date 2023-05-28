@@ -24,6 +24,13 @@ RUN pip3 install ultralytics
 # 	&& apt-get clean autoclean \
 # 	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
+# Install some tools
+RUN apt install -y bash-completion \
+    nano \
+    && apt-get -y autoremove \
+	&& apt-get clean autoclean \
+	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
 # Copy scripts
 RUN mkdir -p /usr/local/bin/scripts
 COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/
