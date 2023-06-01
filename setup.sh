@@ -28,7 +28,7 @@ else
 fi
 
 export ISAAC_ROS_WS=${HOME}/workspaces/isaac_ros-dev
-
+export WORKSPACES_PATH=${HOME}/workspaces
 
 echo "Create ROS workspace at $HOME/workspaces "
 sleep 1
@@ -130,6 +130,9 @@ cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_co
 # build_d2dtracker_image.sh
 print_info "Copying build_d2dtracker_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
 cp $ROOT/scripts/build_d2dtracker_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+
+print_info "Copying bash.sh to ~/workspaces/" && sleep 1
+cp $ROOT/scripts/bash.sh $WORKSPACES_PATH/
 
 if [[ ! -d "$ISAAC_ROS_WS/src/isaac_ros_common/docker/libs"  ]]; then
     cd $ISAAC_ROS_WS/src/isaac_ros_common/docker && mkdir libs
