@@ -40,7 +40,7 @@ else
 fi
 
 print_info "Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
-cd $ROOT/docker && make d2dtracker-jetson
+cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION}
 
 source $HOME/.bashrc
 
