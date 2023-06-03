@@ -126,7 +126,6 @@ docker run -it \
     --privileged \
     --network host \
     ${DOCKER_ARGS[@]} \
-    -v $ISAAC_ROS_DEV_DIR:/workspaces/isaac_ros-dev \
     -v $HOST_DEV_DIR:/home/admin/shared_volume \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
