@@ -4,8 +4,8 @@
 
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $ROOT/utils/print_color.sh
-source $ROOT/utils/l4t_version.sh
+source $ROOT/../utils/print_color.sh
+source $ROOT/../utils/l4t_version.sh
 
 
 # Prevent running as root.
