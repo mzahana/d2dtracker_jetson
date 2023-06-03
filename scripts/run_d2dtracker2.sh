@@ -133,7 +133,7 @@ docker run -it \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
     --user="admin" \
-    --entrypoint /usr/local/bin/scripts/modified-workspace-entrypoint.sh \
+    --entrypoint /ros_entrypoint.sh \
     --workdir /home/admin/shared_volume \
     $@ \
     $BASE_NAME \

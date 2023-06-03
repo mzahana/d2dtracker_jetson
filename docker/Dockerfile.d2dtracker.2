@@ -159,5 +159,7 @@ RUN cd /usr/src/ultralytics \
 # Set environment variables
 ENV OMP_NUM_THREADS=1
 
+RUN echo 'source /ros_entrypoint.sh' >> /home/admin/.bashrc
+
 
 CMD ["/bin/bash"]
