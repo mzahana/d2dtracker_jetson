@@ -120,6 +120,10 @@ if [[ -n "$SUDO_PASSWORD" ]]; then
 fi
 
 HOST_DEV_DIR=$HOME/${CONTAINER_NAME}_shared_volume
+if [ ! -d "$HOST_DEV_DIR" ]; then
+    mkdir -p $HOST_DEV_DIR
+fi
+
 # Run container from image
 print_info "Running $CONTAINER_NAME"
 docker run -it \
