@@ -42,8 +42,9 @@ else
     print_warning "d2dtracker3 alias already exists in .bashrc file. No changes made."
 fi
 
+source $ROOT/docker/scripts/opencv_version.sh
 print_info "Building mzahana/d2dtracker:r35.1.0 ..."
-cd $ROOT/docker && make d2dtracker-jetson-r35.1.0 L4TVER=${L4T_VERSION} UNAME="admin" USER_ID=`id -u` U_GID=`id -g`
+cd $ROOT/docker && make d2dtracker-jetson-r35.1.0 CV_URL=${OPENCV_URL} CV_DEB=${OPENCV_DEB} L4TVER=${L4T_VERSION} UNAME="admin" USER_ID=`id -u` U_GID=`id -g`
 
 source $HOME/.bashrc
 
