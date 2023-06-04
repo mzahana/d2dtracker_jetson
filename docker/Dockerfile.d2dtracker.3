@@ -280,7 +280,8 @@ ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt /u
 
 # Install pip packages manually for TensorRT compatibility https://github.com/NVIDIA/TensorRT/issues/2567
 RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx thop "numpy==1.23"
-RUN pip install --no-cache -e .
+RUN cd /usr/src/ultralytics && \
+    pip install --no-cache -e .
 
 # Set environment variables
 ENV OMP_NUM_THREADS=1
@@ -485,7 +486,7 @@ RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git \
     && make \
     && make install \
     && ldconfig /usr/local/lib/
-    
+
 #
 # Create admin non-root user
 #
