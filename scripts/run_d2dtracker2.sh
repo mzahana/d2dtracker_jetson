@@ -56,7 +56,7 @@ if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
         echo "Restarting the container..."
         docker start ${CONTAINER_NAME}
     fi
-    docker exec --user admin -it --workdir /workspaces ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
+    docker exec --user admin -it --workdir /home/admin/shared_volume ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
     exit 0
 fi
 
