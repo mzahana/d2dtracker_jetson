@@ -103,11 +103,8 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         if [ ! -d "\$HOME/shared_volume/ros2_ws/src/d2dtracker_system" ]; then
             cd \$HOME/shared_volume/ros2_ws/src
             git clone https://github.com/mzahana/d2dtracker_system.git
-            cd \$HOME/shared_volume/ros2_ws/src/d2dtracker_system && ./setup.sh
         fi && \
-        if [ ! -d "\$HOME/shared_volume/ros2_ws/install" ]; then
-            cd \$HOME/shared_volume/ros2_ws/ && colcon build
-        fi && \
+        cd \$HOME/shared_volume/ros2_ws/src/d2dtracker_system && ./setup.sh && \
         source \$HOME/shared_volume/ros2_ws/install/setup.bash && \
         /bin/bash"
 
