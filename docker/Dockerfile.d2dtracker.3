@@ -188,15 +188,22 @@ RUN python3 -m pip install -U \
   paho-mqtt
 
 # Core dev libraries
-RUN apt-get update && apt-get install -y \
-        libasio-dev \
-        libbullet-dev \
-        libtinyxml2-dev \
-        libcunit1-dev \
-        libopencv-dev=4.2.0+dfsg-5 \
-        python3-opencv=4.2.0+dfsg-5 \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
+# RUN apt-get update && apt-get install -y \
+#         libasio-dev \
+#         libbullet-dev \
+#         libtinyxml2-dev \
+#         libcunit1-dev \
+#         libopencv-dev=4.2.0+dfsg-5 \
+#         python3-opencv=4.2.0+dfsg-5 \
+# && rm -rf /var/lib/apt/lists/* \
+# && apt-get clean
+
+# install OpenCV (with CUDA)
+ARG OPENCV_URL=https://nvidia.box.com/shared/static/5v89u6g5rb62fpz4lh0rz531ajo2t5ef.gz
+ARG OPENCV_DEB=OpenCV-4.5.0-aarch64.tar.gz
+
+COPY scripts/opencv_install.sh opencv_install.sh
+RUN ./opencv_install.sh ${OPENCV_URL} ${OPENCV_DEB}
 
 # NPP library
 RUN apt-get update && apt-get install -y --no-install-recommends \
