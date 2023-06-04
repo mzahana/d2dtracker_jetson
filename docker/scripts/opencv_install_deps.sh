@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bashopencv
 # this script installs build dependencies for compiling OpenCV
 
 set -e -x

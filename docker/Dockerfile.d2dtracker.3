@@ -474,6 +474,19 @@ COPY scripts/hotplug-realsense.sh /opt/realsense/hotplug-realsense.sh
 COPY udev_rules/99-realsense-libusb-custom.rules /etc/udev/rules.d/99-realsense-libusb-custom.rules
 
 #
+# Setup XRCE-DDS Agent & Client
+# Can not use snap inside docker :(
+# RUN snap install micro-xrce-dds-agent --edge
+RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git \
+    && cd Micro-XRCE-DDS-Agent \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make \
+    && make install \
+    && ldconfig /usr/local/lib/
+    
+#
 # Create admin non-root user
 #
 
