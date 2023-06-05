@@ -126,6 +126,10 @@ cp $ROOT/scripts/run_d2dtracker.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 print_info "Copying Dockerfile.d2dtracker to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
 cp $ROOT/docker/Dockerfile.d2dtracker $ISAAC_ROS_WS/src/isaac_ros_common/docker/
 
+# Dockerfile.user
+print_info "Copying Dockerfile.user to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
+cp $ROOT/docker/Dockerfile.user $ISAAC_ROS_WS/src/isaac_ros_common/docker/
+
 # modified-workspace-entrypoint.sh 
 print_info "Copying modified-workspace-entrypoint.sh to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
 cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
