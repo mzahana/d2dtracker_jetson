@@ -48,15 +48,14 @@ RUN apt update && apt install -y bash-completion \
 
 COPY libs/nvToolsExt.h /usr/local/cuda-11.4/targets/aarch64-linux/include/nvToolsExt.h
 COPY libs/libnvToolsExt.so /usr/local/cuda-11.4/targets/aarch64-linux/lib/libnvToolsExt.so
+COPY libs/libcusparse.so.11 /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusparse.so.11
+COPY libs/cusparse.h /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h
 
 # Copy scripts
 RUN echo "copying entrypoint script..."
 RUN mkdir -p /usr/local/bin/scripts
 COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/
 RUN  chmod +x /usr/local/bin/scripts/*.sh
-
-COPY scripts/libcusparse.so.11 /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusparse.so.11
-COPY scripts/cusparse.h /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h
 
 # RUN cd /home/${USERNAME} && touch .bashrc
 # RUN sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/
