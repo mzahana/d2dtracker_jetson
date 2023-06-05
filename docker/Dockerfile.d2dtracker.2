@@ -2,7 +2,9 @@
 
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
-    
+
+RUN mkdir -p ${ROS_ROOT}/src
+
 # download ROS sources
 # https://answers.ros.org/question/325245/minimal-ros2-installation/?answer=325249#post-id-325249
 RUN cd ${ROS_ROOT} \
