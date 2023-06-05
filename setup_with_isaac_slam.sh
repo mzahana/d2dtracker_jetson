@@ -161,6 +161,12 @@ cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h $ISAAC_ROS_WS/s
 print_info "Copying libcusparse.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
 cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusparse.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
 
+print_info "Copying libcusolver.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
+cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/lib/libcusolver.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+
+print_info "Copying cusolverDn.h to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
+cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/include/cusolverDn.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+
 bashrc_file="$HOME/.bashrc"
 line_to_check="alias isaac_ros_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_dev.sh'"
 

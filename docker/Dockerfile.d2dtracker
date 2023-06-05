@@ -50,6 +50,8 @@ COPY libs/nvToolsExt.h /usr/local/cuda-11.4/targets/aarch64-linux/include/nvTool
 COPY libs/libnvToolsExt.so /usr/local/cuda-11.4/targets/aarch64-linux/lib/libnvToolsExt.so
 COPY libs/libcusparse.so.11 /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusparse.so.11
 COPY libs/cusparse.h /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h
+COPY libs/libcusolver.so.11 /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusolver.so.11
+COPY libs/cusolverDn.h /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolverDn.h
 
 # Copy scripts
 RUN echo "copying entrypoint script..."

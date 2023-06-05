@@ -127,6 +127,7 @@ if [[ $PLATFORM == "aarch64" ]]; then
     DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcudla.so.1:/usr/local/cuda-11.4/targets/aarch64-linux/lib/libcudla.so.1")
     DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/include/nvToolsExt.h:/usr/local/cuda-11.4/targets/aarch64-linux/include/nvToolsExt.h")
     DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h:/usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h")
+    DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolverDn.h:/usr/local/cuda-11.4/targets/aarch64-linux/include/cusolverDn.h")
     DOCKER_ARGS+=("-v /usr/lib/aarch64-linux-gnu/tegra:/usr/lib/aarch64-linux-gnu/tegra")
     DOCKER_ARGS+=("-v /usr/src/jetson_multimedia_api:/usr/src/jetson_multimedia_api")
     DOCKER_ARGS+=("-v /opt/nvidia/nsight-systems-cli:/opt/nvidia/nsight-systems-cli")
