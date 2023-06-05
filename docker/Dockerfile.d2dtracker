@@ -32,7 +32,7 @@ ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt /u
 
 # Install pip packages manually for TensorRT compatibility https://github.com/NVIDIA/TensorRT/issues/2567
 RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx thop "numpy==1.23"
-COPY docker/ultralytics/requirements.txt /usr/src/ultralytics/
+COPY ultralytics/requirements.txt /usr/src/ultralytics/requirements.txt
 RUN cd /usr/src/ultralytics \
     && pip install --no-cache -e .
 
