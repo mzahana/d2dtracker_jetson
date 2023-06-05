@@ -54,7 +54,7 @@ RUN  chmod +x /usr/local/bin/scripts/*.sh
 COPY libs/nvToolsExt.h /usr/local/cuda-11.4/targets/aarch64-linux/include/nvToolsExt.h
 COPY libs/libnvToolsExt.so /usr/local/cuda-11.4/targets/aarch64-linux/lib/libnvToolsExt.so
 
-RUN cd /home/admin && touch .bashrc
+RUN cd /home/${USERNAME} && touch .bashrc
 RUN sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/
 
 CMD ["/bin/bash"]
