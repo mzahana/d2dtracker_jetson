@@ -18,11 +18,26 @@ RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
 #
 # Install yolov8 dependencies
 # 
-# RUN pip3 install opencv-python
-RUN pip3 install ultralytics
-# RUN apt install ros-humble-vision-msgs -y \
-# 	&& apt-get clean autoclean \
-# 	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+# RUN pip3 install ultralytics
+
+# Downloads to user config dir
+ADD https://ultralytics.com/assets/Arial.ttf https://ultralytics.com/assets/Arial.Unicode.ttf /home/admin/.config/Ultralytics/
+# Create working directory
+RUN mkdir -p /usr/src/ultralytics
+
+# Copy contents
+# COPY . /usr/src/app  (issues as not a .git directory)
+RUN git clone https://github.com/ultralytics/ultralytics /usr/src/ultralytics
+ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt /usr/src/ultralytics/
+
+# Install pip packages manually for TensorRT compatibility https://github.com/NVIDIA/TensorRT/issues/2567
+RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx thop "numpy==1.23"
+COPY ultralytics/requirements.txt /usr/src/ultralytics/
+RUN cd /usr/src/ultralytics \
+    && pip install --no-cache -e .
+
+# Set environment variables
+ENV OMP_NUM_THREADS=1
 
 # Install some tools
 RUN apt update && apt install -y bash-completion \
