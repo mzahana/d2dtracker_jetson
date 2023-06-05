@@ -49,8 +49,8 @@ RUN  chmod +x /usr/local/bin/scripts/*.sh
 RUN mkdir -p /usr/local/share/middleware_profiles
 COPY middleware_profiles/*profile.xml /usr/local/share/middleware_profiles/
 
-RUN cd /home/${USERNAME}} && touch .bashrc
-RUN sudo chown -R${USERNAME}:${USERNAME} /home/${USERNAME}
+RUN cd /home/${USERNAME} && touch .bashrc
+RUN sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
 
 ENV USERNAME=${USERNAME}
 ENV USER_GID=${USER_GID}
