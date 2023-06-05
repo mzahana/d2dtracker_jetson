@@ -9,8 +9,7 @@ RUN mkdir -p ${ROS_ROOT}/src
 # https://answers.ros.org/question/325245/minimal-ros2-installation/?answer=325249#post-id-325249
 RUN cd ${ROS_ROOT} \
     && rosinstall_generator --deps --rosdistro ${ROS_DISTRO} \
-	launch_xml \
-	ldiagnostic_updater  \
+	diagnostic_updater  \
     > ros2.${ROS_DISTRO}.rosinstall \
     && cat ros2.${ROS_DISTRO}.rosinstall
 RUN cd ${ROS_ROOT}  \
