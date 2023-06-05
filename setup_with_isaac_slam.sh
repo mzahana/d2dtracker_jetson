@@ -131,7 +131,7 @@ print_info "Copying modified-workspace-entrypoint.sh to $ISAAC_ROS_WS/src/isaac_
 cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
 
 print_info "Copying requirements.txt to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
-cp $ROOT/scripts/requirements.txt $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
+cp $ROOT/docker/ultralytics/requirements.txt $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
 
 # build_d2dtracker_image.sh
 print_info "Copying build_d2dtracker_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
