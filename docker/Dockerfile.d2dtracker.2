@@ -19,8 +19,7 @@ RUN cd ${ROS_ROOT}  \
 
 # skip installation of some conflicting packages
 RUN SKIP_KEYS="libopencv-dev libopencv-contrib-dev libopencv-imgproc-dev python-opencv python3-opencv" \
-    && cd ${ROS_ROOT}  \ 
-    && rosdep init \
+    && cd ${ROS_ROOT}  \
     && rosdep update \
     && rosdep install -y \
         --ignore-src \
