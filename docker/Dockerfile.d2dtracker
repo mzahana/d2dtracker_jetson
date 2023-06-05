@@ -29,10 +29,10 @@ RUN mkdir -p /usr/src/ultralytics
 # COPY . /usr/src/app  (issues as not a .git directory)
 RUN git clone https://github.com/ultralytics/ultralytics /usr/src/ultralytics
 ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt /usr/src/ultralytics/
+COPY scripts/requirements.txt /usr/src/ultralytics/requirements.txt
 
 # Install pip packages manually for TensorRT compatibility https://github.com/NVIDIA/TensorRT/issues/2567
 RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx thop "numpy==1.23"
-COPY scripts/requirements.txt /usr/src/ultralytics/requirements.txt
 RUN cd /usr/src/ultralytics \
     && pip install --no-cache -e .
 
