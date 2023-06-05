@@ -50,6 +50,7 @@ COPY libs/nvToolsExt.h /usr/local/cuda-11.4/targets/aarch64-linux/include/nvTool
 COPY libs/libnvToolsExt.so /usr/local/cuda-11.4/targets/aarch64-linux/lib/libnvToolsExt.so
 
 # Copy scripts
+RUN echo "copying entrypoint script..."
 RUN mkdir -p /usr/local/bin/scripts
 COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/
 RUN  chmod +x /usr/local/bin/scripts/*.sh
