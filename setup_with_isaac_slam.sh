@@ -83,15 +83,18 @@ fi
 
 #
 # Setup the udev rules of Realsense camera
+if [ ! -d "$HOME/src" ]; then
+    mkdir $HOME/src
+fi
 echo "Setting up Realsense udev rules ..." && sleep 1
-if [ ! -d "/tmp/librealsense" ]; then
-    cd /tmp
+if [ ! -d "$HOME/src/librealsense" ]; then
+    cd $HOME/src
     git clone https://github.com/IntelRealSense/librealsense 
 else
-    cd /tmp/librealsense
+    cd $HOME/src/librealsense
     git pull origin master
 fi
-cd /tmp/librealsense && \
+cd $HOME/src/librealsense && \
 ./scripts/setup_udev_rules.sh
 
 #
