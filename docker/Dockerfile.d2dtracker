@@ -46,13 +46,13 @@ RUN apt update && apt install -y bash-completion \
 	&& apt-get clean autoclean \
 	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
+COPY libs/nvToolsExt.h /usr/local/cuda-11.4/targets/aarch64-linux/include/nvToolsExt.h
+COPY libs/libnvToolsExt.so /usr/local/cuda-11.4/targets/aarch64-linux/lib/libnvToolsExt.so
+
 # Copy scripts
 RUN mkdir -p /usr/local/bin/scripts
 COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/
 RUN  chmod +x /usr/local/bin/scripts/*.sh
-
-COPY libs/nvToolsExt.h /usr/local/cuda-11.4/targets/aarch64-linux/include/nvToolsExt.h
-COPY libs/libnvToolsExt.so /usr/local/cuda-11.4/targets/aarch64-linux/lib/libnvToolsExt.so
 
 # RUN cd /home/${USERNAME} && touch .bashrc
 # RUN sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/
