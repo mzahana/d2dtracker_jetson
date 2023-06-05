@@ -144,6 +144,14 @@ cp $ROOT/scripts/build_d2dtracker_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/sc
 print_info "Copying bash.sh to ~/workspaces/" && sleep 1
 cp $ROOT/scripts/bash.sh $WORKSPACES_PATH/
 
+print_info "Copying cusparse.h to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
+cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+
+print_info "Copying libcusparse.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
+cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusparse.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+
+
+
 if [[ ! -d "$ISAAC_ROS_WS/src/isaac_ros_common/docker/libs"  ]]; then
     cd $ISAAC_ROS_WS/src/isaac_ros_common/docker && mkdir libs
 fi
