@@ -170,6 +170,16 @@ RUN cd /usr/src/ultralytics \
 # # Set environment variables
 ENV OMP_NUM_THREADS=1
 
+#
+# Missing Net tools
+RUN apt update \
+    && apt install -y \
+    net-tools \
+    iputils-ping \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+
 # # Copy scripts
 # RUN mkdir -p /usr/local/bin/scripts
 # COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh
