@@ -31,7 +31,7 @@ RUN rm -r ${ROS_ROOT}/src/ament_cmake \
     && git -C ${ROS_ROOT}/src/ clone https://github.com/ament/ament_cmake -b ${ROS_DISTRO}   
 
 # skip installation of some conflicting packages
-RUN SKIP_KEYS=--skip-keys "fastcdr rti-connext-dds-6.0.1 rti-connext-dds-5.3.1 urdfdom_headers libopencv-dev libopencv-contrib-dev libopencv-imgproc-dev python-opencv python3-opencv" \
+RUN SKIP_KEYS="fastcdr rti-connext-dds-6.0.1 rti-connext-dds-5.3.1 urdfdom_headers libopencv-dev libopencv-contrib-dev libopencv-imgproc-dev python-opencv python3-opencv" \
     && cd ${ROS_ROOT}  \
     && rosdep update \
     && rosdep install -y \
@@ -189,6 +189,10 @@ RUN apt update \
     iputils-ping \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
+
+# Copy middleware profiles
+RUN mkdir -p /usr/local/share/middleware_profiles
+COPY middleware_profiles/*profile.xml /usr/local/share/middleware_profiles/
 
 
 # # Copy scripts

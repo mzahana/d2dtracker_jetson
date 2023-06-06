@@ -59,10 +59,6 @@ RUN mkdir -p /usr/local/bin/scripts
 COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/
 RUN  chmod +x /usr/local/bin/scripts/*.sh
 
-# Copy middleware profiles
-RUN mkdir -p /usr/local/share/middleware_profiles
-COPY middleware_profiles/*profile.xml /usr/local/share/middleware_profiles/
-
 # RUN cd /home/${USERNAME} && touch .bashrc
 # RUN sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/
 
