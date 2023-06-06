@@ -47,6 +47,14 @@ cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="admin" US
 
 source $HOME/.bashrc
 
+CONTAINER_NAME="d2dtracker-container2"
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume" ]; then
+    print_info "Creating container's shared volume: $HOME/${CONTAINER_NAME}_shared_volume" && sleep 1
+    mkdir $HOME/${CONTAINER_NAME}_shared_volume
+fi
+print_info "copying bash.sh to container shared volume at ${HOME}/${CONTAINER_NAME}_shared_volume" && sleep 1
+cp $ROOT/scripts/bash.sh $HOME/${CONTAINER_NAME}_shared_volume/
+
 echo "Execute " && print_info "d2dtracker " && echo "to start the d2dtracker-container2"
 
 print_info "DONE!"
