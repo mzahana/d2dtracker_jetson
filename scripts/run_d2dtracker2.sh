@@ -127,7 +127,7 @@ docker run -it \
     --privileged \
     --network host \
     ${DOCKER_ARGS[@]} \
-    -v $HOST_DEV_DIR:/home/admin/shared_volume \
+    -v $HOST_DEV_DIR:/root/shared_volume \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
