@@ -190,6 +190,13 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
+#
+# Dependencies for Arducam
+# Ref: https://docs.arducam.com/Nvidia-Jetson-Camera/Multi-Camera-CamArray/quick-start/
+#
+RUN pip3 install v4l2-fix \
+    && pip3 install jetson-stats
+
 # Copy middleware profiles
 RUN mkdir -p /usr/local/share/middleware_profiles
 COPY middleware_profiles/*profile.xml /usr/local/share/middleware_profiles/

@@ -55,6 +55,11 @@ fi
 print_info "copying bash.sh to container shared volume at ${HOME}/${CONTAINER_NAME}_shared_volume" && sleep 1
 cp $ROOT/scripts/bash.sh $HOME/${CONTAINER_NAME}_shared_volume/
 
-echo "Execute " && print_info "d2dtracker " && echo "to start the d2dtracker-container2"
+echo "You can execute " && print_info "d2dtracker " && echo "to start the d2dtracker-container2"
+
+print_info "Installing Arducam drivers..." && sleep 1
+print_warning "Reboot your device after this step" && sleep 2
+
+source $ROOT/scripts/arducam_drivers.sh
 
 print_info "DONE!"
