@@ -197,6 +197,9 @@ RUN apt update \
 RUN pip3 install v4l2-fix \
     && pip3 install jetson-stats
 
+RUN apt update \
+    && apt install -y gedit
+
 # Copy middleware profiles
 RUN mkdir -p /usr/local/share/middleware_profiles
 COPY middleware_profiles/*profile.xml /usr/local/share/middleware_profiles/
