@@ -7,6 +7,7 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/../utils/print_color.sh
 source $ROOT/../utils/l4t_version.sh
 
+SETUP_ISAAC_ROS="True"
 
 # Prevent running as root.
 if [[ $(id -u) -eq 0 ]]; then
@@ -49,6 +50,11 @@ fi
 if [[ -n "$SUDO_PASSWORD" ]]; then
     CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
 fi
+
+if [[ -n "$SETUP_ISAAC_ROS" ]]; then
+    CMD="export SETUP_ISAAC_ROS=$SETUP_ISAAC_ROS && $CMD"
+fi
+
 
 if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
     if [ "$(docker ps -aq -f status=exited -f name=${CONTAINER_NAME})" ]; then
@@ -120,7 +126,7 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
             cd \$HOME/shared_volume/ros2_ws/src
             git clone https://github.com/mzahana/d2dtracker_system.git
         fi && \
-        cd \$HOME/shared_volume/ros2_ws/src/d2dtracker_system && ./setup.sh && \
+        cd \$HOME/shared_volume/ros2_ws/src/d2dtracker_system && clone_isaac_ros.sh && ./setup.sh && \
         source \$HOME/shared_volume/ros2_ws/install/setup.bash && \
         /bin/bash"
 
@@ -130,6 +136,10 @@ fi
 
 if [[ -n "$SUDO_PASSWORD" ]]; then
     CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
+fi
+
+if [[ -n "$SETUP_ISAAC_ROS" ]]; then
+    CMD="export SETUP_ISAAC_ROS=$SETUP_ISAAC_ROS && $CMD"
 fi
 
 HOST_DEV_DIR=$HOME/${CONTAINER_NAME}_shared_volume
