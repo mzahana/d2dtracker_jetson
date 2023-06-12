@@ -126,7 +126,7 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
             cd \$HOME/shared_volume/ros2_ws/src
             git clone https://github.com/mzahana/d2dtracker_system.git
         fi && \
-        cd \$HOME/shared_volume/ros2_ws/src/d2dtracker_system && clone_isaac_ros.sh && ./setup.sh && \
+        cd \$HOME/shared_volume/ros2_ws/src/d2dtracker_system && ./clone_isaac_ros.sh && ./setup.sh && \
         source \$HOME/shared_volume/ros2_ws/install/setup.bash && \
         /bin/bash"
 
