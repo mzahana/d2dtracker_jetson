@@ -352,10 +352,8 @@ RUN apt-get update && mkdir -p ${ROS_ROOT}/src && cd ${ROS_ROOT}/src \
 && rm -rf /var/lib/apt/lists/* \
 && apt-get clean
 
-RUN git lfs install --skip-repo \
-    && && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
-    
+RUN git lfs install --skip-repo
+
 # # Copy scripts
 # RUN mkdir -p /usr/local/bin/scripts
 # COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh
