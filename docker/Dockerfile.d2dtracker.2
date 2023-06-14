@@ -354,6 +354,11 @@ RUN apt-get update && mkdir -p ${ROS_ROOT}/src && cd ${ROS_ROOT}/src \
 
 RUN git lfs install --skip-repo
 
+# Bash atuto completion
+RUN apt update \
+    && apt install -y bash-completion \
+    && source /etc/bash_completion
+
 # # Copy scripts
 # RUN mkdir -p /usr/local/bin/scripts
 # COPY scripts/ros_entrypoint.sh /ros_entrypoint.sh
