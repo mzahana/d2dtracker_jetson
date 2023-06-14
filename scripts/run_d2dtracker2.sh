@@ -75,8 +75,8 @@ if [ -n "$DISPLAY" ]; then
 	
 	# enable SSH X11 forwarding inside container (https://stackoverflow.com/q/48235040)
 	XAUTH=/tmp/.docker.xauth
-	xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
-	chmod 777 $XAUTH
+	sudo xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+	sudo chmod 777 $XAUTH
 
 	DISPLAY_DEVICE="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH"
 	DOCKER_ARGS+=("-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH")
