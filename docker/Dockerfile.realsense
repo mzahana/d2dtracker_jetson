@@ -1,0 +1,28 @@
+# Dockerfile for setting up Realsense driver
+#  https://github.com/jetsonhacks/installRealSenseSDK
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+COPY scripts/build-librealsense.sh /opt/realsense/build-librealsense.sh
+COPY scripts/install-realsense-dependencies.sh /opt/realsense/install-realsense-dependencies.sh
+
+RUN chmod +x /opt/realsense/install-realsense-dependencies.sh && /opt/realsense/install-realsense-dependencies.sh
+RUN chmod +x /opt/realsense/build-librealsense.sh && /opt/realsense/build-librealsense.sh
+
+# Copy hotplug script which will get invoked whenever a devices plugged or un-plugged
+RUN mkdir -p /opt/realsense/
+COPY scripts/hotplug-realsense.sh /opt/realsense/hotplug-realsense.sh
+
+# Copy custom udev rules file
+COPY udev_rules/99-realsense-libusb-custom.rules /etc/udev/rules.d/99-realsense-libusb-custom.rules
+
+# Copy scripts
+RUN echo "copying entrypoint script..."
+RUN mkdir -p /usr/local/bin/scripts
+COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/
+RUN  chmod +x /usr/local/bin/scripts/*.sh
+
+# Bash atuto completion
+RUN apt update \
+    && apt install -y bash-completion \
+    && source /etc/bash_completion

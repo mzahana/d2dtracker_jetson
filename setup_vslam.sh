@@ -100,14 +100,14 @@ cd $HOME/src/librealsense && \
 #
 # Clone realsense-ros 4.51.1
 #
-# print_info "Cloning realsense-ros ... " && sleep 1
-# if [ ! -d "$ISAAC_ROS_WS/src/realsense-ros" ]; then
-#     cd $ISAAC_ROS_WS/src
-#     git clone https://github.com/IntelRealSense/realsense-ros.git -b 4.51.1
-# else
-#     cd $ISAAC_ROS_WS/src/realsense-ros
-#     git checkout 4.51.1
-# fi
+print_info "Cloning realsense-ros ... " && sleep 1
+if [ ! -d "$ISAAC_ROS_WS/src/realsense-ros" ]; then
+    cd $ISAAC_ROS_WS/src
+    git clone https://github.com/IntelRealSense/realsense-ros.git -b 4.51.1
+else
+    cd $ISAAC_ROS_WS/src/realsense-ros
+    git checkout 4.51.1
+fi
 
 print_info "Configuring container..." && sleep 1
 if [ -f "$ISAAC_ROS_WS/src/isaac_ros_common/scripts/.isaac_ros_common-config" ]; then
@@ -116,15 +116,15 @@ if [ -f "$ISAAC_ROS_WS/src/isaac_ros_common/scripts/.isaac_ros_common-config" ];
 fi
 cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 touch .isaac_ros_common-config && \
-echo CONFIG_IMAGE_KEY=ros2_humble.realsense.d2dtracker > .isaac_ros_common-config
+echo CONFIG_IMAGE_KEY=ros2_humble.realsense > .isaac_ros_common-config
 
-# run_d2dtracker.sh
-print_info "Copying run_d2dtracker.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
-cp $ROOT/scripts/run_d2dtracker.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+# run_vslam.sh
+print_info "Copying run_vslam.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
+cp $ROOT/scripts/run_vslam.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 
-# Dockerfile.d2dtracker
-print_info "Copying Dockerfile.d2dtracker to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
-cp $ROOT/docker/Dockerfile.d2dtracker $ISAAC_ROS_WS/src/isaac_ros_common/docker/
+# Dockerfile.realsense
+print_info "Copying Dockerfile.realsense to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
+cp $ROOT/docker/Dockerfile.realsense $ISAAC_ROS_WS/src/isaac_ros_common/docker/
 
 # Dockerfile.user
 print_info "Copying Dockerfile.user to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
@@ -134,41 +134,38 @@ cp $ROOT/docker/Dockerfile.user $ISAAC_ROS_WS/src/isaac_ros_common/docker/
 print_info "Copying modified-workspace-entrypoint.sh to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
 cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
 
-print_info "Copying requirements.txt to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
-cp $ROOT/docker/ultralytics/requirements.txt $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
-
-# build_d2dtracker_image.sh
-print_info "Copying build_d2dtracker_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
-cp $ROOT/scripts/build_d2dtracker_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+# build_vslam_image.sh
+print_info "Copying build_vslam_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
+cp $ROOT/scripts/build_vslam_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 
 print_info "Copying bash.sh to ~/workspaces/" && sleep 1
 cp $ROOT/scripts/bash.sh $WORKSPACES_PATH/
 
 
 
-if [[ ! -d "$ISAAC_ROS_WS/src/isaac_ros_common/docker/libs"  ]]; then
-    cd $ISAAC_ROS_WS/src/isaac_ros_common/docker && mkdir libs
-fi
+# if [[ ! -d "$ISAAC_ROS_WS/src/isaac_ros_common/docker/libs"  ]]; then
+#     cd $ISAAC_ROS_WS/src/isaac_ros_common/docker && mkdir libs
+# fi
 
-print_info "Copying nvToolsExt.h"
-cp $ROOT/libs/nvToolsExt.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
-print_info "Copying libnvToolsExt.so"
-cp $ROOT/libs/libnvToolsExt.so $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+# print_info "Copying nvToolsExt.h"
+# cp $ROOT/libs/nvToolsExt.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+# print_info "Copying libnvToolsExt.so"
+# cp $ROOT/libs/libnvToolsExt.so $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
 
-print_info "Copying cusparse.h to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+# print_info "Copying cusparse.h to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
+# cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
 
-print_info "Copying libcusparse.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusparse.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+# print_info "Copying libcusparse.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
+# cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusparse.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
 
-print_info "Copying libcusolver.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusolver.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+# print_info "Copying libcusolver.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
+# cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusolver.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
 
-print_info "Copying cusolverDn.h to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolverDn.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+# print_info "Copying cusolverDn.h to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
+# cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolverDn.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
 
-print_info "Copying cusolve* to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolver* $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
+# print_info "Copying cusolve* to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
+# cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolver* $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
 
 bashrc_file="$HOME/.bashrc"
 line_to_check="alias isaac_ros_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_dev.sh'"
@@ -181,30 +178,30 @@ else
 fi
 
 bashrc_file="$HOME/.bashrc"
-line_to_check="alias d2dtracker_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_d2dtracker.sh'"
+line_to_check="alias vslam_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_vslam.sh'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    print_info "d2dtracker_container alias added to .bashrc file."
+    print_info "vslam_container alias added to .bashrc file."
 else
-    print_warning "d2dtracker_container alias already exists in .bashrc file. No changes made."
+    print_warning "vslam_container alias already exists in .bashrc file. No changes made."
 fi
 
 bashrc_file="$HOME/.bashrc"
-line_to_check="alias build_d2dtracker_image='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/build_d2dtracker_image.sh'"
+line_to_check="alias build_vslam_image='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/build_vslam_image.sh'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    print_info "build_d2dtracker_image alias added to .bashrc file."
+    print_info "build_vslam_image alias added to .bashrc file."
 else
-    print_warning "build_d2dtracker_image alias already exists in .bashrc file. No changes made."
+    print_warning "build_vslam_image alias already exists in .bashrc file. No changes made."
 fi
 
-print_info "Building d2dtracker-image ..."
-cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts && ./build_d2dtracker_image.sh
+print_info "Building vslam-image ..."
+cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts && ./build_vslam_image.sh
 
 source $HOME/.bashrc
 
-echo "Execute " && print_info "d2dtracker_container " && echo "to start the d2dtracker-container"
+echo "Execute " && print_info "vslam_container " && echo "to start the vslam-container"
 
 print_info "DONE!"
