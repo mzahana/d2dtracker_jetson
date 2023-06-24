@@ -34,7 +34,7 @@ else
     git pull origin master
 fi
 print_info "patching ROS2Visualizer.h ..." && sleep 1
-cp cp $ROOT/docker/patches/ROS2Visualizer.h $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins/ov_msckf/src/ros/
+cp $ROOT/docker/patches/ROS2Visualizer.h $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins/ov_msckf/src/ros/
 
 bashrc_file="$HOME/.bashrc"
 line_to_check="alias openvins='. $ROOT/scripts/run_openvins.sh'"
