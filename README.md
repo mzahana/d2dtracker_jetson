@@ -67,6 +67,8 @@ openvins
 ```bash
 ros2 launch ov_msckf subscribe.launch.py config:=euroc_mav
 ```
+
+* **IMPROTANT**:  To use `open_vins` with live IMU/camera system, you will need to calibrate your cameras using Kalibr, calibrate your IMU using `allan_ros2` package (only works with ROS foxy, for now), calibrate both cameras and IMU using Kalibr. Then, use the calibration files to update the `config.yaml` file of the open_vins. See below video link for a tutorial.
 * **Reference**: https://docs.openvins.com/gs-tutorial.html
 * **Video** : https://youtu.be/rBT5O5TEOV4
 
