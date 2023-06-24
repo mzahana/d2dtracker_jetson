@@ -1,44 +1,13 @@
 #!/bin/bash
 #
-# Copyright (c) 2021-2022, NVIDIA CORPORATION.  All rights reserved.
-#
-# NVIDIA CORPORATION and its licensors retain all intellectual property
-# and proprietary rights in and to this software, related documentation
-# and any modifications thereto.  Any use, reproduction, disclosure or
-# distribution of this software and related documentation without an express
-# license agreement from NVIDIA CORPORATION is strictly prohibited.
+# Copyright (c) 2023, Mohamed Abdelkader.  All rights reserved.
+
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $ROOT/utils/print_color.sh
+source $ROOT/../utils/print_color.sh
+source $ROOT/../utils/l4t_version.sh
 
-function usage() {
-    print_info "Usage: run_dev.sh" {isaac_ros_dev directory path OPTIONAL}
-    print_info "Copyright (c) 2021-2022, NVIDIA CORPORATION."
-}
-
-ISAAC_ROS_DEV_DIR="$1"
-if [[ -z "$ISAAC_ROS_DEV_DIR" ]]; then
-    ISAAC_ROS_DEV_DIR="$HOME/workspaces/isaac_ros-dev"
-    if [[ ! -d "$ISAAC_ROS_DEV_DIR" ]]; then
-        ISAAC_ROS_DEV_DIR=$(pwd)
-    fi
-    print_warning "isaac_ros_dev not specified, assuming $ISAAC_ROS_DEV_DIR"
-else
-    shift 1
-fi
-
-ON_EXIT=()
-function cleanup {
-    for command in "${ON_EXIT[@]}"
-    do
-        $command
-    done
-}
-trap cleanup EXIT
-
-pushd . >/dev/null
-cd $ROOT
-ON_EXIT+=("popd")
+SETUP_ISAAC_ROS="True"
 
 # Prevent running as root.
 if [[ $(id -u) -eq 0 ]]; then
@@ -65,17 +34,13 @@ fi
 
 PLATFORM="$(uname -m)"
 
-BASE_NAME="isaac_ros_dev-$PLATFORM"
-# CONTAINER_NAME="$BASE_NAME-container"
+BASE_NAME="mzahana/d2dtracker-jetson:r${L4T_VERSION}"
 CONTAINER_NAME="d2dtracker-container"
 
 
-CMD="export DEV_DIR=/workspaces && \
-        if [[ -f "/workspaces/ros2_ws/install/setup.bash" ]]; then
-            source /workspaces/ros2_ws/install/setup.bash
-        fi && \
-        if [[ -f "/workspaces/isaac_ros-dev/install/setup.bash" ]]; then
-            source /workspaces/isaac_ros-dev/install/setup.bash
+CMD="export DEV_DIR=\$HOME/shared_volume && \
+        if [[ -f "\$HOME/shared_volume/ros2_ws/install/setup.bash" ]]; then
+            source \$HOME/shared_volume/ros2_ws/install/setup.bash
         fi && \
          /bin/bash"
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
@@ -85,17 +50,11 @@ fi
 if [[ -n "$SUDO_PASSWORD" ]]; then
     CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
 fi
-# Re-use existing container.
-# if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
-#     print_info "Attaching to running container: $CONTAINER_NAME"
-#     docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME /bin/bash $@
-#     exit 0
-# fi
-# if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
-#     print_info "Attaching to running container: $CONTAINER_NAME"
-#     docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME bash -c "${CMD}"
-#     exit 0
-# fi
+
+if [[ -n "$SETUP_ISAAC_ROS" ]]; then
+    CMD="export SETUP_ISAAC_ROS=$SETUP_ISAAC_ROS && $CMD"
+fi
+
 
 if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
     if [ "$(docker ps -aq -f status=exited -f name=${CONTAINER_NAME})" ]; then
@@ -103,15 +62,31 @@ if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
         echo "Restarting the container..."
         docker start ${CONTAINER_NAME}
     fi
-    docker exec --user admin -it --workdir /workspaces ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
+    docker exec -it --workdir /root/shared_volume ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
     exit 0
+fi
+
+DISPLAY_DEVICE=" "
+DOCKER_ARGS=" "
+
+if [ -n "$DISPLAY" ]; then
+	# give docker root user X11 permissions
+	sudo xhost +si:localuser:root
+	
+	# enable SSH X11 forwarding inside container (https://stackoverflow.com/q/48235040)
+	XAUTH=/tmp/.docker.xauth
+	sudo xauth nlist $DISPLAY | sudo sed -e 's/^..../ffff/' | sudo xauth -f $XAUTH nmerge -
+	sudo chmod 777 $XAUTH
+
+	DISPLAY_DEVICE="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH"
+	DOCKER_ARGS+=("-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH")
 fi
 
 
 # Map host's display socket to docker
-DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
-DOCKER_ARGS+=("-v $HOME/.Xauthority:/home/admin/.Xauthority:rw")
-DOCKER_ARGS+=("-e DISPLAY")
+#DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
+#DOCKER_ARGS+=("-v $HOME/.Xauthority:/root/.Xauthority:rw")
+#DOCKER_ARGS+=("-e DISPLAY")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
 DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
 DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/usr/local/share/middleware_profiles/rtps_udp_profile.xml")
@@ -126,8 +101,6 @@ if [[ $PLATFORM == "aarch64" ]]; then
     DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcupti.so.11.4:/usr/local/cuda-11.4/targets/aarch64-linux/lib/libcupti.so.11.4")
     DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcudla.so.1:/usr/local/cuda-11.4/targets/aarch64-linux/lib/libcudla.so.1")
     DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/include/nvToolsExt.h:/usr/local/cuda-11.4/targets/aarch64-linux/include/nvToolsExt.h")
-    DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h:/usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h")
-    DOCKER_ARGS+=("-v /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolverDn.h:/usr/local/cuda-11.4/targets/aarch64-linux/include/cusolverDn.h")
     DOCKER_ARGS+=("-v /usr/lib/aarch64-linux-gnu/tegra:/usr/lib/aarch64-linux-gnu/tegra")
     DOCKER_ARGS+=("-v /usr/src/jetson_multimedia_api:/usr/src/jetson_multimedia_api")
     DOCKER_ARGS+=("-v /opt/nvidia/nsight-systems-cli:/opt/nvidia/nsight-systems-cli")
@@ -143,36 +116,18 @@ if [[ $PLATFORM == "aarch64" ]]; then
     fi
 fi
 
-# Optionally load custom docker arguments from file
-DOCKER_ARGS_FILE="$ROOT/.isaac_ros_dev-dockerargs"
-if [[ -f "$DOCKER_ARGS_FILE" ]]; then
-    print_info "Using additional Docker run arguments from $DOCKER_ARGS_FILE"
-    readarray -t DOCKER_ARGS_FILE_LINES < $DOCKER_ARGS_FILE
-    for arg in "${DOCKER_ARGS_FILE_LINES[@]}"; do
-        DOCKER_ARGS+=($(eval "echo $arg | envsubst"))
-    done
-fi
 
 # Custom command to run after logging into the container
-CMD="export DEV_DIR=/workspaces && \
-        if [ ! -d "/workspaces/ros2_ws" ]; then
-            mkdir -p /workspaces/ros2_ws/src
+CMD="export DEV_DIR=\$HOME/shared_volume && \
+        if [ ! -d "\$HOME/shared_volume/ros2_ws" ]; then
+            mkdir -p \$HOME/shared_volume/ros2_ws/src
         fi && \
-        if [ ! -d "/workspaces/ros2_ws/src/d2dtracker_system" ]; then
-            cd /workspaces/ros2_ws/src
+        if [ ! -d "\$HOME/shared_volume/ros2_ws/src/d2dtracker_system" ]; then
+            cd \$HOME/shared_volume/ros2_ws/src
             git clone https://github.com/mzahana/d2dtracker_system.git
-            cd /workspaces/ros2_ws/src/d2dtracker_system && ./setup.sh
         fi && \
-        if [ ! -d "/workspaces/ros2_ws/install" ]; then
-            cd /workspaces/ros2_ws/ && colon build
-        fi && \
-        source /workspaces/ros2_ws/install/setup.bash && \
-        if [ -d "/workspaces/isaac_ros-dev/src" ]; then
-            if [ ! -d "/workspaces/isaac_ros-dev/install" ]; then
-                cd /workspaces/isaac_ros-dev && colcon build
-            fi
-            source /workspaces/isaac_ros-dev/install/setup.bash
-        fi && \
+        cd \$HOME/shared_volume/ros2_ws/src/d2dtracker_system && ./setup.sh && \
+        source \$HOME/shared_volume/ros2_ws/install/setup.bash && \
         /bin/bash"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
@@ -183,22 +138,28 @@ if [[ -n "$SUDO_PASSWORD" ]]; then
     CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
 fi
 
-HOST_DEV_DIR=$HOME/workspaces
+if [[ -n "$SETUP_ISAAC_ROS" ]]; then
+    CMD="export SETUP_ISAAC_ROS=$SETUP_ISAAC_ROS && $CMD"
+fi
+
+HOST_DEV_DIR=$HOME/${CONTAINER_NAME}_shared_volume
+if [ ! -d "$HOST_DEV_DIR" ]; then
+    mkdir -p $HOST_DEV_DIR
+fi
+
 # Run container from image
 print_info "Running $CONTAINER_NAME"
 docker run -it \
     --privileged \
     --network host \
     ${DOCKER_ARGS[@]} \
-    -v $ISAAC_ROS_DEV_DIR:/workspaces/isaac_ros-dev \
-    -v $HOST_DEV_DIR:/workspaces \
+    -v $HOST_DEV_DIR:/root/shared_volume \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
-    --user="admin" \
-    --entrypoint /usr/local/bin/scripts/modified-workspace-entrypoint.sh \
-    --workdir /workspaces \
+    --entrypoint /ros_entrypoint.sh \
+    --workdir /root/shared_volume \
     $@ \
     $BASE_NAME \
     bash -c "${CMD}"

@@ -7,7 +7,6 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/../utils/print_color.sh
 source $ROOT/../utils/l4t_version.sh
 
-SETUP_ISAAC_ROS="True"
 
 # Prevent running as root.
 if [[ $(id -u) -eq 0 ]]; then
@@ -34,8 +33,8 @@ fi
 
 PLATFORM="$(uname -m)"
 
-BASE_NAME="mzahana/d2dtracker-jetson:r${L4T_VERSION}"
-CONTAINER_NAME="d2dtracker-container2"
+BASE_NAME="mzahana/openvins-jetson:r${L4T_VERSION}"
+CONTAINER_NAME="openvins-container"
 
 
 CMD="export DEV_DIR=\$HOME/shared_volume && \
@@ -51,9 +50,6 @@ if [[ -n "$SUDO_PASSWORD" ]]; then
     CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
 fi
 
-if [[ -n "$SETUP_ISAAC_ROS" ]]; then
-    CMD="export SETUP_ISAAC_ROS=$SETUP_ISAAC_ROS && $CMD"
-fi
 
 
 if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
@@ -122,12 +118,7 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         if [ ! -d "\$HOME/shared_volume/ros2_ws" ]; then
             mkdir -p \$HOME/shared_volume/ros2_ws/src
         fi && \
-        if [ ! -d "\$HOME/shared_volume/ros2_ws/src/d2dtracker_system" ]; then
-            cd \$HOME/shared_volume/ros2_ws/src
-            git clone https://github.com/mzahana/d2dtracker_system.git
-        fi && \
-        cd \$HOME/shared_volume/ros2_ws/src/d2dtracker_system && ./setup.sh && \
-        source \$HOME/shared_volume/ros2_ws/install/setup.bash && \
+        \$HOME/shared_volume/ros2_ws && colcon build && \
         /bin/bash"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
@@ -138,9 +129,6 @@ if [[ -n "$SUDO_PASSWORD" ]]; then
     CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
 fi
 
-if [[ -n "$SETUP_ISAAC_ROS" ]]; then
-    CMD="export SETUP_ISAAC_ROS=$SETUP_ISAAC_ROS && $CMD"
-fi
 
 HOST_DEV_DIR=$HOME/${CONTAINER_NAME}_shared_volume
 if [ ! -d "$HOST_DEV_DIR" ]; then

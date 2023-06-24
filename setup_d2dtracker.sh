@@ -33,7 +33,7 @@ cd $HOME/src/librealsense && \
 ./scripts/setup_udev_rules.sh
 
 bashrc_file="$HOME/.bashrc"
-line_to_check="alias d2dtracker='. $ROOT/scripts/run_d2dtracker2.sh'"
+line_to_check="alias d2dtracker='. $ROOT/scripts/run_d2dtracker.sh'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
@@ -47,7 +47,7 @@ cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="admin" US
 
 source $HOME/.bashrc
 
-CONTAINER_NAME="d2dtracker-container2"
+CONTAINER_NAME="d2dtracker-container"
 if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume" ]; then
     print_info "Creating container's shared volume: $HOME/${CONTAINER_NAME}_shared_volume" && sleep 1
     mkdir $HOME/${CONTAINER_NAME}_shared_volume
@@ -55,7 +55,7 @@ fi
 print_info "copying bash.sh to container shared volume at ${HOME}/${CONTAINER_NAME}_shared_volume" && sleep 1
 cp $ROOT/scripts/bash.sh $HOME/${CONTAINER_NAME}_shared_volume/
 
-echo "You can execute " && print_info "d2dtracker " && echo "to start the d2dtracker-container2"
+echo "You can execute " && print_info "d2dtracker " && echo "to start the d2dtracker-container"
 
 print_info "Installing Arducam drivers..." && sleep 1
 print_warning "Reboot your device after this step" && sleep 2
