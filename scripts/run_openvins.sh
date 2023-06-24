@@ -118,7 +118,7 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         if [ ! -d "\$HOME/shared_volume/ros2_ws" ]; then
             mkdir -p \$HOME/shared_volume/ros2_ws/src
         fi && \
-        \$HOME/shared_volume/ros2_ws && colcon build && \
+        cd \$HOME/shared_volume/ros2_ws && colcon build && \
         /bin/bash"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
@@ -148,7 +148,7 @@ docker run -it \
     --runtime nvidia \
     --user="admin" \
     --entrypoint /ros_entrypoint.sh \
-    --workdir /root/shared_volume \
+    --workdir /home/admin/shared_volume \
     $@ \
     $BASE_NAME \
     bash -c "${CMD}"
