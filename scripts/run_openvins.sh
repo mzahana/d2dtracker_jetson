@@ -58,7 +58,7 @@ if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
         echo "Restarting the container..."
         docker start ${CONTAINER_NAME}
     fi
-    docker exec -it --workdir /root/shared_volume ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
+    docker exec --user admin -it --workdir /home/admin/shared_volume ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
     exit 0
 fi
 
@@ -141,11 +141,12 @@ docker run -it \
     --privileged \
     --network host \
     ${DOCKER_ARGS[@]} \
-    -v $HOST_DEV_DIR:/root/shared_volume \
+    -v $HOST_DEV_DIR:/home/admin/shared_volume \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
+    --user="admin" \
     --entrypoint /ros_entrypoint.sh \
     --workdir /root/shared_volume \
     $@ \
