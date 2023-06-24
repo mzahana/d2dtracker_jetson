@@ -118,7 +118,7 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         if [ ! -d "\$HOME/shared_volume/ros2_ws" ]; then
             mkdir -p \$HOME/shared_volume/ros2_ws/src
         fi && \
-        cd \$HOME/shared_volume/ros2_ws && colcon build && \
+        cd \$HOME/shared_volume/ros2_ws && MAKEFLAGS='j1 -l1' colcon build --executor sequential && \
         /bin/bash"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
