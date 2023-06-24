@@ -33,6 +33,7 @@ else
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins
     git pull origin master
 fi
+print_info "patching ROS2Visualizer.h ..." && sleep 1
 cp cp $ROOT/docker/patches/ROS2Visualizer.h $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins/ov_msckf/src/ros/
 
 bashrc_file="$HOME/.bashrc"
