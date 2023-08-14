@@ -33,13 +33,13 @@ cd $HOME/src/librealsense && \
 ./scripts/setup_udev_rules.sh
 
 bashrc_file="$HOME/.bashrc"
-line_to_check="alias d2dtracker='. $ROOT/scripts/run_d2dtracker.sh'"
+line_to_check="alias d2dtracker_container='. $ROOT/scripts/run_d2dtracker.sh'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    print_info "d2dtracker alias added to .bashrc file."
+    print_info "d2dtracker_container alias added to .bashrc file."
 else
-    print_warning "d2dtracker alias already exists in .bashrc file. No changes made."
+    print_warning "d2dtracker_container alias already exists in .bashrc file. No changes made."
 fi
 
 print_info "Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
@@ -55,7 +55,7 @@ fi
 print_info "copying bash.sh to container shared volume at ${HOME}/${CONTAINER_NAME}_shared_volume" && sleep 1
 cp $ROOT/scripts/bash.sh $HOME/${CONTAINER_NAME}_shared_volume/
 
-echo "You can execute " && print_info "d2dtracker " && echo "to start the d2dtracker-container"
+echo "You can execute " && print_info "d2dtracker_container " && echo "to start the d2dtracker-container"
 
 print_info "Installing Arducam drivers..." && sleep 1
 print_warning "Reboot your device after this step" && sleep 2
