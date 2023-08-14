@@ -123,7 +123,7 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
             mkdir -p \$HOME/shared_volume/ros2_ws/src
         fi && \
         if [ -d "\$HOME/shared_volume/ros2_ws/install" ]; then
-            source \$HOME/shared_volume/ros2_ws/install/setup.bash && \
+            source \$HOME/shared_volume/ros2_ws/install/setup.bash
         fi && \
         /bin/bash"
 
