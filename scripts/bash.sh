@@ -4,10 +4,10 @@ alias cbs='colcon  build --packages-select'
 alias cb='colcon build'
 
 export RUN_XRCE=False
-export RUN_REALSENSE=True
+export RUN_REALSENSE=False
 export RUN_SLAM=False
 export RUN_PX4_ROS=False
 export RUN_KF=False
 export RUN_TRAJ_PRED=False
-export RUN_YOLO=True
-export RUN_YOLO_POSE=True
+export RUN_YOLO=False
+export RUN_YOLO_POSE=False

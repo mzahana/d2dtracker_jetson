@@ -43,7 +43,22 @@ This package can be used to set up the D2DTracker system on Nvidia Jetson paltfo
     ```
 * `source $HOME/.bashrc`
 
-* run `d2dtracker` alias to enter the container
+* run `d2dtracker_container` alias to enter the container
+
+* [Outside the container] Clone the following package
+    ```bash
+    cd $HOME/d2dtracker-container_shared_volume/ros2_ws/src
+    git clone https://github.com/mzahana/d2dtracker_system.git
+    ```
+    Make sure the path `$HOME/d2dtracker-container_shared_volume/ros2_ws/src` exists.
+* [Inside the container] Setup the system
+```bash
+# Enter the container
+d2dtracker_container
+# Go to the d2dtracker_system pkg
+cd $HOME/shared_volume/ros2_ws/src/d2dtracker_system/
+./setup.sh
+```
 
 # Run System
 ## isaac_ros_visual_slam
@@ -75,9 +90,9 @@ ros2 launch ov_msckf subscribe.launch.py config:=euroc_mav
 ## d2dtracker
 ```bash
 source $HOME/.bashrc
-d2dtracker
+d2dtracker_container
 ```
-* Inside the `d2dtracker-container`, there is a `bash.sh` script inside `$HOME/shared_volume`. Edit which moduleyou wish to run (set its flag to `True`), save and close it. Source the `bash.sh` script. Then, run
+* Inside the `d2dtracker-container`, there is a `bash.sh` script inside `$HOME/shared_volume`. Edit which module you wish to run (set its flag to `True`), save and close it. Source the `bash.sh` script. Then, run
 ```bash
 ros2 launch d2dtracker_system run_system.launch.py
 ```
