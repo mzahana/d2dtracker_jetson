@@ -24,6 +24,5 @@ RUN  chmod +x /usr/local/bin/scripts/*.sh
 
 # Bash atuto completion
 RUN apt update \
-    && apt install -y bash-completion \
-    && source /etc/bash_completion \
-    && nano
+    && apt install -y bash-completion nano \
+    && source /etc/bash_completion
