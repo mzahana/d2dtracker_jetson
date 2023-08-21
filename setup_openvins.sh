@@ -37,13 +37,13 @@ print_info "patching ROS2Visualizer.h ..." && sleep 1
 cp $ROOT/docker/patches/ROS2Visualizer.h $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins/ov_msckf/src/ros/
 
 bashrc_file="$HOME/.bashrc"
-line_to_check="alias openvins='. $ROOT/scripts/run_openvins.sh'"
+line_to_check="alias openvins_container='. $ROOT/scripts/run_openvins.sh'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    print_info "openvins alias added to .bashrc file."
+    print_info "openvins_container alias added to .bashrc file."
 else
-    print_warning "openvins alias already exists in .bashrc file. No changes made."
+    print_warning "openvins_container alias already exists in .bashrc file. No changes made."
 fi
 
 print_info "Building mzahana/openvins-jetson:r${L4T_VERSION} ..."
@@ -52,7 +52,7 @@ cd $ROOT/docker && make openvins-jetson L4TVER=${L4T_VERSION} UNAME="admin" USER
 source $HOME/.bashrc
 
 
-echo "You can execute " && print_info "openvins " && echo "to start the openvins-container"
+echo "You can execute " && print_info "openvins_container " && echo "to start the openvins-container"
 
 
 print_info "DONE!"
