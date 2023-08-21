@@ -17,7 +17,7 @@ COPY scripts/hotplug-realsense.sh /opt/realsense/hotplug-realsense.sh
 COPY udev_rules/99-realsense-libusb-custom.rules /etc/udev/rules.d/99-realsense-libusb-custom.rules
 
 # Copy scripts
-RUN echo "copying entrypoint script..."
+#RUN echo "copying entrypoint script..."
 RUN mkdir -p /usr/local/bin/scripts
 COPY scripts/modified-workspace-entrypoint.sh /usr/local/bin/scripts/
 RUN  chmod +x /usr/local/bin/scripts/*.sh
