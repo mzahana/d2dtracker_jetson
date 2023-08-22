@@ -2,6 +2,7 @@
 #
 # Copyright (c) 2023, Mohamed Abdelkader.  All rights reserved.
 
+USERNAME=vins
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/../utils/print_color.sh
@@ -58,7 +59,7 @@ if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
         echo "Restarting the container..."
         docker start ${CONTAINER_NAME}
     fi
-    docker exec --user admin -it --workdir /home/admin/shared_volume ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
+    docker exec --user ${USERNAME} -it --workdir /home/${USERNAME}/shared_volume ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
     return 0
 fi
 
@@ -81,7 +82,7 @@ fi
 
 # Map host's display socket to docker
 DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
-DOCKER_ARGS+=("-v $HOME/.Xauthority:/home/admin/.Xauthority:rw")
+DOCKER_ARGS+=("-v $HOME/.Xauthority:/home/${USERNAME}/.Xauthority:rw")
 DOCKER_ARGS+=("-e DISPLAY")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
 DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
@@ -141,14 +142,14 @@ docker run -it \
     --privileged \
     --network host \
     ${DOCKER_ARGS[@]} \
-    -v $HOST_DEV_DIR:/home/admin/shared_volume \
+    -v $HOST_DEV_DIR:/home/${USERNAME}/shared_volume \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
-    --user="admin" \
+    --user="vins" \
     --entrypoint /ros_entrypoint.sh \
-    --workdir /home/admin/shared_volume \
+    --workdir /home/vins/shared_volume \
     $@ \
     $BASE_NAME \
     bash -c "${CMD}"

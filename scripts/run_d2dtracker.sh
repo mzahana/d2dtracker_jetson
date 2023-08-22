@@ -2,6 +2,7 @@
 #
 # Copyright (c) 2023, Mohamed Abdelkader.  All rights reserved.
 
+USERNAME=d2d
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/../utils/print_color.sh
@@ -62,31 +63,31 @@ if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
         echo "Restarting the container..."
         docker start ${CONTAINER_NAME}
     fi
-    docker exec -it --workdir /root/shared_volume ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
+    docker exec -it --workdir /home/${USERNAME}/shared_volume ${CONTAINER_NAME} env TERM=xterm-256color bash -c "${CMD}"
     return 0
 fi
 
-DISPLAY_DEVICE=" "
-DOCKER_ARGS=" "
+# DISPLAY_DEVICE=" "
+# DOCKER_ARGS=" "
 
-if [ -n "$DISPLAY" ]; then
-	# give docker root user X11 permissions
-	sudo xhost +si:localuser:root
+# if [ -n "$DISPLAY" ]; then
+# 	# give docker root user X11 permissions
+# 	sudo xhost +si:localuser:root
 	
-	# enable SSH X11 forwarding inside container (https://stackoverflow.com/q/48235040)
-	XAUTH=/tmp/.docker.xauth
-	sudo xauth nlist $DISPLAY | sudo sed -e 's/^..../ffff/' | sudo xauth -f $XAUTH nmerge -
-	sudo chmod 777 $XAUTH
+# 	# enable SSH X11 forwarding inside container (https://stackoverflow.com/q/48235040)
+# 	XAUTH=/tmp/.docker.xauth
+# 	sudo xauth nlist $DISPLAY | sudo sed -e 's/^..../ffff/' | sudo xauth -f $XAUTH nmerge -
+# 	sudo chmod 777 $XAUTH
 
-	DISPLAY_DEVICE="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH"
-	DOCKER_ARGS+=("-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH")
-fi
+# 	DISPLAY_DEVICE="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH"
+# 	DOCKER_ARGS+=("-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH")
+# fi
 
 
 # Map host's display socket to docker
-#DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
-#DOCKER_ARGS+=("-v $HOME/.Xauthority:/root/.Xauthority:rw")
-#DOCKER_ARGS+=("-e DISPLAY")
+DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
+DOCKER_ARGS+=("-v $HOME/.Xauthority:/home/${USERNAME}/.Xauthority:rw")
+DOCKER_ARGS+=("-e DISPLAY")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
 DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
 DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/usr/local/share/middleware_profiles/rtps_udp_profile.xml")
@@ -150,13 +151,13 @@ docker run -it \
     --privileged \
     --network host \
     ${DOCKER_ARGS[@]} \
-    -v $HOST_DEV_DIR:/root/shared_volume \
+    -v $HOST_DEV_DIR:/home/${USERNAME}/shared_volume \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
     --entrypoint /ros_entrypoint.sh \
-    --workdir /root/shared_volume \
+    --workdir /home/${USERNAME}/shared_volume \
     $@ \
     $BASE_NAME \
     bash -c "${CMD}"

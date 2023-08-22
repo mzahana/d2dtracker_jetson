@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+USERNAME=vins
+
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/utils/print_color.sh
 source $ROOT/utils/l4t_version.sh
@@ -47,7 +49,7 @@ else
 fi
 
 print_info "Building mzahana/openvins-jetson:r${L4T_VERSION} ..."
-cd $ROOT/docker && make openvins-jetson L4TVER=${L4T_VERSION} UNAME="admin" USER_ID=`id -u` U_GID=`id -g`
+cd $ROOT/docker && make openvins-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
 
 source $HOME/.bashrc
 

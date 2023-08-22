@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+USERNAME=d2d
+
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/utils/print_color.sh
 source $ROOT/utils/l4t_version.sh
@@ -43,7 +45,7 @@ else
 fi
 
 print_info "Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
-cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="admin" USER_ID=`id -u` U_GID=`id -g`
+cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
 
 source $HOME/.bashrc
 

@@ -110,19 +110,19 @@ RUN apt update \
     && apt install -y bash-completion \
     && source /etc/bash_completion
 
-# Setup non-root admin user
-ARG USERNAME=admin
+# Setup non-root vins user
+ARG USERNAME=vins
 ARG USER_UID=1000
 ARG USER_GID=1000
 
 
-# Create the 'admin' user if not already exists
+# Create the 'vins' user if not already exists
 RUN if [ ! $(getent passwd ${USERNAME}) ]; then \
         groupadd --gid ${USER_GID} ${USERNAME} ; \
         useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME} ; \
     fi
 
-# Update 'admin' user
+# Update 'vins' user
 RUN echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
     && chmod 0440 /etc/sudoers.d/${USERNAME} \
     && adduser ${USERNAME} video && adduser ${USERNAME} plugdev && adduser ${USERNAME} sudo
