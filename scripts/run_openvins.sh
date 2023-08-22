@@ -62,27 +62,27 @@ if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
     return 0
 fi
 
-DISPLAY_DEVICE=" "
-DOCKER_ARGS=" "
+# DISPLAY_DEVICE=" "
+# DOCKER_ARGS=" "
 
-if [ -n "$DISPLAY" ]; then
-	# give docker root user X11 permissions
-	sudo xhost +si:localuser:root
+# if [ -n "$DISPLAY" ]; then
+# 	# give docker root user X11 permissions
+# 	sudo xhost +si:localuser:root
 	
-	# enable SSH X11 forwarding inside container (https://stackoverflow.com/q/48235040)
-	XAUTH=/tmp/.docker.xauth
-	sudo xauth nlist $DISPLAY | sudo sed -e 's/^..../ffff/' | sudo xauth -f $XAUTH nmerge -
-	sudo chmod 777 $XAUTH
+# 	# enable SSH X11 forwarding inside container (https://stackoverflow.com/q/48235040)
+# 	XAUTH=/tmp/.docker.xauth
+# 	sudo xauth nlist $DISPLAY | sudo sed -e 's/^..../ffff/' | sudo xauth -f $XAUTH nmerge -
+# 	sudo chmod 777 $XAUTH
 
-	DISPLAY_DEVICE="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH"
-	DOCKER_ARGS+=("-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH")
-fi
+# 	DISPLAY_DEVICE="-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH"
+# 	DOCKER_ARGS+=("-e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH")
+# fi
 
 
 # Map host's display socket to docker
-#DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
-#DOCKER_ARGS+=("-v $HOME/.Xauthority:/root/.Xauthority:rw")
-#DOCKER_ARGS+=("-e DISPLAY")
+DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
+DOCKER_ARGS+=("-v $HOME/.Xauthority:/home/admin/.Xauthority:rw")
+DOCKER_ARGS+=("-e DISPLAY")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
 DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
 DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/usr/local/share/middleware_profiles/rtps_udp_profile.xml")
