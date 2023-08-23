@@ -175,7 +175,7 @@ ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt /u
 # RUN python3 -m pip install --upgrade pip wheel
 # RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx thop "numpy==1.23"
 COPY ultralytics/requirements.txt usr/src/ultralytics
-RUN cd /usr/src/ultralytics \
+RUN cd /usr/src/ultralytics && git pull origin main \
     && pip install --no-cache .
 
 # # Set environment variables
