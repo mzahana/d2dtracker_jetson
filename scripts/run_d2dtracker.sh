@@ -156,6 +156,7 @@ docker run -it \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
+    --user="${USERNAME}" \
     --entrypoint /ros_entrypoint.sh \
     --workdir /home/${USERNAME}/shared_volume \
     $@ \

@@ -38,7 +38,8 @@ BASE_NAME="mzahana/openvins-jetson:r${L4T_VERSION}"
 CONTAINER_NAME="openvins-container"
 
 
-CMD="export DEV_DIR=\$HOME/shared_volume && \
+CMD="source /ros_entrypoint.sh && \
+    export DEV_DIR=\$HOME/shared_volume && \
         if [[ -f "\$HOME/shared_volume/ros2_ws/install/setup.bash" ]]; then
             source \$HOME/shared_volume/ros2_ws/install/setup.bash
         fi && \
@@ -147,7 +148,7 @@ docker run -it \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
-    --user="vins" \
+    --user="${USERNAME}" \
     --entrypoint /ros_entrypoint.sh \
     --workdir /home/vins/shared_volume \
     $@ \
