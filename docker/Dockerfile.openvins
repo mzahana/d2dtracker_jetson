@@ -10,52 +10,52 @@ RUN mkdir -p ${ROS_ROOT}/src
 ENV PYTHONWARNINGS=ignore:::setuptools.command.install,ignore:::setuptools.command.easy_install,ignore:::pkg_resources
 RUN echo "Warning: Using the PYTHONWARNINGS environment variable to silence setup.py and easy_install deprecation warnings caused by colcon"
 
-# Add ROS 2 apt repository
-RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2-testing/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+# # Add ROS 2 apt repository
+# RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+# RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2-testing/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-# Restore using the default Humble DDS middleware: FastRTPS
-ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-# download ROS sources
-# https://answers.ros.org/question/325245/minimal-ros2-installation/?answer=325249#post-id-325249
-RUN cd ${ROS_ROOT} \
-    && rosinstall_generator --deps --rosdistro ${ROS_DISTRO} \
-	diagnostic_updater  \
-    > ros2.${ROS_DISTRO}.rosinstall \
-    && cat ros2.${ROS_DISTRO}.rosinstall
-RUN cd ${ROS_ROOT}  \
-    && vcs import src < ros2.${ROS_DISTRO}.rosinstall
+# # Restore using the default Humble DDS middleware: FastRTPS
+# ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+# # download ROS sources
+# # https://answers.ros.org/question/325245/minimal-ros2-installation/?answer=325249#post-id-325249
+# RUN cd ${ROS_ROOT} \
+#     && rosinstall_generator --deps --rosdistro ${ROS_DISTRO} \
+# 	diagnostic_updater  \
+#     > ros2.${ROS_DISTRO}.rosinstall \
+#     && cat ros2.${ROS_DISTRO}.rosinstall
+# RUN cd ${ROS_ROOT}  \
+#     && vcs import src < ros2.${ROS_DISTRO}.rosinstall
 
- # https://github.com/dusty-nv/jetson-containers/issues/181
-RUN rm -r ${ROS_ROOT}/src/ament_cmake \
-    && git -C ${ROS_ROOT}/src/ clone https://github.com/ament/ament_cmake -b ${ROS_DISTRO}   
+#  # https://github.com/dusty-nv/jetson-containers/issues/181
+# RUN rm -r ${ROS_ROOT}/src/ament_cmake \
+#     && git -C ${ROS_ROOT}/src/ clone https://github.com/ament/ament_cmake -b ${ROS_DISTRO}   
 
-# skip installation of some conflicting packages
-RUN SKIP_KEYS="fastcdr rti-connext-dds-6.0.1 rti-connext-dds-5.3.1 urdfdom_headers libopencv-dev libopencv-contrib-dev libopencv-imgproc-dev python-opencv python3-opencv" \
-    && cd ${ROS_ROOT}  \
-    && rosdep update \
-    && rosdep install -y \
-        --ignore-src \
-        --from-paths src \
-        --rosdistro ${ROS_DISTRO} \
-        --skip-keys "$SKIP_KEYS"
+# # skip installation of some conflicting packages
+# RUN SKIP_KEYS="fastcdr rti-connext-dds-6.0.1 rti-connext-dds-5.3.1 urdfdom_headers libopencv-dev libopencv-contrib-dev libopencv-imgproc-dev python-opencv python3-opencv" \
+#     && cd ${ROS_ROOT}  \
+#     && rosdep update \
+#     && rosdep install -y \
+#         --ignore-src \
+#         --from-paths src \
+#         --rosdistro ${ROS_DISTRO} \
+#         --skip-keys "$SKIP_KEYS"
 
-RUN cd ${ROS_ROOT}  \
-    && colcon build \
-	--merge-install \
-	--cmake-args -DCMAKE_BUILD_TYPE=Release 
+# RUN cd ${ROS_ROOT}  \
+#     && colcon build \
+# 	--merge-install \
+# 	--cmake-args -DCMAKE_BUILD_TYPE=Release 
     
-# remove build files
-RUN cd ${ROS_ROOT}  \
-    && rm -rf ${ROS_ROOT}/src \
-    && rm -rf ${ROS_ROOT}/logs \
-    && rm -rf ${ROS_ROOT}/build \
-    && rm ${ROS_ROOT}/*.rosinstall
+# # remove build files
+# RUN cd ${ROS_ROOT}  \
+#     && rm -rf ${ROS_ROOT}/src \
+#     && rm -rf ${ROS_ROOT}/logs \
+#     && rm -rf ${ROS_ROOT}/build \
+#     && rm ${ROS_ROOT}/*.rosinstall
     
-# cleanup apt   
-RUN cd ${ROS_ROOT}  \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+# # cleanup apt   
+# RUN cd ${ROS_ROOT}  \
+#     && rm -rf /var/lib/apt/lists/* \
+#     && apt-get clean
 
 #
 # OpenVins depndencies
