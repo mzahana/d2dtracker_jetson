@@ -57,11 +57,30 @@ fi
 print_info "copying bash.sh to container shared volume at ${HOME}/${CONTAINER_NAME}_shared_volume" && sleep 1
 cp $ROOT/scripts/bash.sh $HOME/${CONTAINER_NAME}_shared_volume/
 
-echo "You can execute " && print_info "d2dtracker_container " && echo "to start the d2dtracker-container"
+
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws" ]; then
+    print_info "Creating ros2_ws in $HOME/${CONTAINER_NAME}_shared_volume" && sleep 1
+    mkdir $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws
+fi
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src" ]; then
+    mkdir $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+fi
+
+print_info "Cloning d2dtracker_system package into $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src"
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/d2dtracker_system" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone https://github.com/mzahana/d2dtracker_system.git
+else
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/d2dtracker_system
+    git pull origin main
+fi
 
 print_info "Installing Arducam drivers..." && sleep 1
 print_warning "Reboot your device after this step" && sleep 2
 
 source $ROOT/scripts/arducam_drivers.sh
+
+echo "You can execute " && print_info "d2dtracker_container " && echo "to start the d2dtracker-container"
+print_warning "If this is the first time you setup d2dtracker on Jetson, enter the container and run the setup.sh script inside the d2dtracker_system pkg, inside the container"
 
 print_info "DONE!"
