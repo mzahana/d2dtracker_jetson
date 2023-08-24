@@ -1,5 +1,8 @@
 # d2dtracker_jetson
-This package can be used to set up the D2DTracker system on Nvidia Jetson paltforms. 
+This package can be used to set up the D2DTracker system on Nvidia Jetson paltforms.
+
+# Supported Jetpacks
+* JetPack `5.1.1`. Uses NVIDIA `L4T 35.3.1`
 
 # Quick Setup
 **NOTE: All th following steps should be done on the Jetson board.**
