@@ -3,6 +3,9 @@ alias d2d='ros2 launch d2dtracker_system run_system.launch.py'
 alias cbs='colcon  build --packages-select'
 alias cb='colcon build'
 
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export ROS_DOMAIN_ID=1
+
 export RUN_XRCE=False
 export RUN_REALSENSE=False
 export RUN_SLAM=False

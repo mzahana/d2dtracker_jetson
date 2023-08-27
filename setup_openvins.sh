@@ -20,6 +20,9 @@ if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume" ]; then
     mkdir -p $HOME/${CONTAINER_NAME}_shared_volume
 fi
 
+print_info "copying bash.sh to container shared volume at ${HOME}/${CONTAINER_NAME}_shared_volume" && sleep 1
+cp $ROOT/scripts/bash.sh $HOME/${CONTAINER_NAME}_shared_volume/
+
 if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws" ];then
     mkdir -p $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws
 fi
