@@ -28,6 +28,11 @@ This package can be used to set up the D2DTracker system on Nvidia Jetson paltfo
 * `source $HOME/.bashrc`
 
 * run `vslam_container` alias to enter the container
+* After entering the container for the 1st time, you need to build the workspace.
+    ```bash
+    cd /workspaces/isaac_ros-dev
+    colcon build
+    ```
 ## Setup the openvins container
 * setup
     ```bash
@@ -37,6 +42,11 @@ This package can be used to set up the D2DTracker system on Nvidia Jetson paltfo
 * `source $HOME/.bashrc`
 
 * run `openvins` alias to enter the container
+* After entering the container for the 1st time, you need to build the workspace.
+    ```bash
+    cd /home/vins/shared_volume/ros2_ws
+    MAKEFLAGS='j1 -l1' colcon build --executor sequential
+    ```
 
 ## Setup the d2dtracker container
 * setup
@@ -48,12 +58,6 @@ This package can be used to set up the D2DTracker system on Nvidia Jetson paltfo
 
 * run `d2dtracker_container` alias to enter the container
 
-* [Outside the container] Clone the following package
-    ```bash
-    cd $HOME/d2dtracker-container_shared_volume/ros2_ws/src
-    git clone https://github.com/mzahana/d2dtracker_system.git
-    ```
-    Make sure the path `$HOME/d2dtracker-container_shared_volume/ros2_ws/src` exists.
 * [Inside the container] Setup the system
 ```bash
 # Enter the container

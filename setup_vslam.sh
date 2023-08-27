@@ -42,6 +42,9 @@ if [ ! -d "$HOME/workspaces/isaac_ros-dev" ]; then
     mkdir -p $HOME/workspaces/isaac_ros-dev/src
 fi
 
+print_info "copying bash.sh to container shared volume at ${HOME}/workspaces/" && sleep 1
+cp $ROOT/scripts/bash.sh ${HOME}/workspaces/
+
 print_info "Cloning Nvidia ROS packages ..."
 sleep 1
 

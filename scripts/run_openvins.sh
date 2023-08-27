@@ -43,6 +43,9 @@ CMD="source /ros_entrypoint.sh && \
         if [[ -f "\$HOME/shared_volume/ros2_ws/install/setup.bash" ]]; then
             source \$HOME/shared_volume/ros2_ws/install/setup.bash
         fi && \
+        if [[ -f "\$HOME/shared_volume/bash.sh" ]]; then
+            source \$HOME/shared_volume/bash.sh
+        fi && \
          /bin/bash"
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
     CMD="export GIT_USER=$GIT_USER && export GIT_TOKEN=$GIT_TOKEN && $CMD"
@@ -116,11 +119,12 @@ fi
 
 
 # Custom command to run after logging into the container
+#cd \$HOME/shared_volume/ros2_ws && MAKEFLAGS='j1 -l1' colcon build --executor sequential && \
 CMD="export DEV_DIR=\$HOME/shared_volume && \
         if [ ! -d "\$HOME/shared_volume/ros2_ws" ]; then
             mkdir -p \$HOME/shared_volume/ros2_ws/src
         fi && \
-        cd \$HOME/shared_volume/ros2_ws && MAKEFLAGS='j1 -l1' colcon build --executor sequential && \
+        
         /bin/bash"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
