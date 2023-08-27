@@ -149,13 +149,11 @@ fi
 
 # Custom command to run after logging into the container
 CMD="export DEV_DIR=/workspaces && \
-        if [ -d "/workspaces/isaac_ros-dev/src" ]; then
-            if [ ! -d "/workspaces/isaac_ros-dev/install" ]; then
-                cd /workspaces/isaac_ros-dev && colcon build
-            fi
-        fi && \
         if [ -f "/workspaces/isaac_ros-dev/install/setup.bash" ]; then
             source /workspaces/isaac_ros-dev/install/setup.bash
+        fi && \
+        if [[ -f "\$HOME/shared_volume/bash.sh" ]]; then
+            source \$HOME/shared_volume/bash.sh
         fi && \
         /bin/bash"
 

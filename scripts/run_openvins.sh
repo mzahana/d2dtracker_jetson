@@ -124,7 +124,9 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         if [ ! -d "\$HOME/shared_volume/ros2_ws" ]; then
             mkdir -p \$HOME/shared_volume/ros2_ws/src
         fi && \
-        
+        if [[ -f "\$HOME/shared_volume/bash.sh" ]]; then
+            source \$HOME/shared_volume/bash.sh
+        fi && \        
         /bin/bash"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
