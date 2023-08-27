@@ -152,8 +152,8 @@ CMD="export DEV_DIR=/workspaces && \
         if [ -f "/workspaces/isaac_ros-dev/install/setup.bash" ]; then
             source /workspaces/isaac_ros-dev/install/setup.bash
         fi && \
-        if [[ -f "\$HOME/shared_volume/bash.sh" ]]; then
-            source \$HOME/shared_volume/bash.sh
+        if [[ -f "/workspace/bash.sh" ]]; then
+            source /workspace/bash.sh
         fi && \
         /bin/bash"
 
