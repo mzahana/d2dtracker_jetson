@@ -4,7 +4,7 @@ alias cbs='colcon  build --packages-select'
 alias cb='colcon build'
 
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-export ROS_DOMAIN_ID=1
+export ROS_DOMAIN_ID=17
 
 export RUN_XRCE=False
 export RUN_REALSENSE=False
