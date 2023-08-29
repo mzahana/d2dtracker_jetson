@@ -103,3 +103,15 @@ d2dtracker_container
 ```bash
 ros2 launch d2dtracker_system run_system.launch.py
 ```
+
+# Issues
+If you face issues with docker permissions after a fresh install of a jetpack, you can execute the following in a terminal on Jetson, and reboot.
+```bash
+sudo usermod -aG docker $USER
+
+sudo chown root:docker /var/run/docker.sock
+
+rm -rf ~/.docker
+
+#reboot
+```
