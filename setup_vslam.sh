@@ -234,10 +234,10 @@ latest_exists=$(docker images -q isaac_ros_dev-aarch64:latest)
 
 # If the image isaac_ros_dev-aarch64:latest does not exist, retag the image
 if [ -z "$latest_exists" ]; then
-    echo "Image isaac_ros_dev-aarch64:latest does not exist. Retagging..."
+    print_info "Image isaac_ros_dev-aarch64:latest does not exist. Retagging..."
     docker tag mzahana/isaac_ros_dev-aarch64:${TAG} isaac_ros_dev-aarch64:latest
 else
-    echo "Image isaac_ros_dev-aarch64:latest already exists. Doing nothing."
+    print_warning "Image isaac_ros_dev-aarch64:latest already exists. Doing nothing."
 fi
 
 source $HOME/.bashrc
