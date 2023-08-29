@@ -89,6 +89,9 @@ if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src" ]; then
     mkdir $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
 fi
 
+#
+# Cloning d2dtracker_system
+#
 print_info "Cloning d2dtracker_system package into $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src"
 if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/d2dtracker_system" ]; then
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
@@ -97,6 +100,21 @@ else
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/d2dtracker_system
     git pull origin main
 fi
+
+#
+# Cloning open_vins
+#
+print_info "Cloning open_vins ..." && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins" ];then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone https://github.com/rpng/open_vins/
+else
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins
+    git pull origin master
+fi
+print_info "patching ROS2Visualizer.h ..." && sleep 1
+cp $ROOT/docker/patches/ROS2Visualizer.h $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins/ov_msckf/src/ros/
+
 
 print_info "Installing Arducam drivers..." && sleep 1
 print_warning "Reboot your device after this step" && sleep 2
