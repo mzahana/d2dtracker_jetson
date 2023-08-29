@@ -51,8 +51,31 @@ else
     print_warning "openvins_container alias already exists in .bashrc file. No changes made."
 fi
 
-print_info "Building mzahana/openvins-jetson:r${L4T_VERSION} ..."
-cd $ROOT/docker && make openvins-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
+# Define the image name and tag
+IMAGE_NAME="mzahana/openvins-jetson"
+TAG="${L4T_VERSION}"
+FULL_IMAGE_NAME="$IMAGE_NAME:$TAG"
+
+# Check if the image already exists locally
+docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1
+
+# $? is a special variable that holds the exit status of the last command executed
+if [ $? -eq 0 ]; then
+  echo "Image $FULL_IMAGE_NAME already exists locally."
+else
+    # Try to pull the image
+    print_info "Trying to pull $FULL_IMAGE_NAME"
+    docker pull $FULL_IMAGE_NAME
+
+    # Check if the pull was successful
+    if [ $? -eq 0 ]; then
+        print_info "Successfully pulled $FULL_IMAGE_NAME"
+    else
+        print_error "Failed to pull $FULL_IMAGE_NAME, building locally..."
+        print_info "Building mzahana/openvins-jetson:r${L4T_VERSION} ..."
+        cd $ROOT/docker && make openvins-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
+    fi
+fi
 
 source $HOME/.bashrc
 

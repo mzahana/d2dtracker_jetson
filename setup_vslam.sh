@@ -202,8 +202,43 @@ else
     print_warning "build_vslam_image alias already exists in .bashrc file. No changes made."
 fi
 
-print_info "Building vslam-image ..."
-cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts && ./build_vslam_image.sh
+# Define the image name and tag
+IMAGE_NAME="mzahana/isaac_ros_dev-aarch64"
+TAG="${L4T_VERSION}"
+FULL_IMAGE_NAME="$IMAGE_NAME:$TAG"
+
+# Check if the image already exists locally
+docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1
+
+# $? is a special variable that holds the exit status of the last command executed
+if [ $? -eq 0 ]; then
+  echo "Image $FULL_IMAGE_NAME already exists locally."
+else
+    # Try to pull the image
+    print_info "Trying to pull $FULL_IMAGE_NAME"
+    docker pull $FULL_IMAGE_NAME
+
+    # Check if the pull was successful
+    if [ $? -eq 0 ]; then
+        print_info "Successfully pulled $FULL_IMAGE_NAME"
+    else
+        print_error "Failed to pull $FULL_IMAGE_NAME, building locally..."
+        print_info "Building vslam-image ..."
+        cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts && ./build_vslam_image.sh
+    fi
+fi
+
+# Need to re-tag the image from "mzahana/isaac_ros_dev-aarch64"  to "isaac_ros_dev-aarch64"
+# Check if the image isaac_ros_dev-aarch64:latest exists locally
+latest_exists=$(docker images -q isaac_ros_dev-aarch64:latest)
+
+# If the image isaac_ros_dev-aarch64:latest does not exist, retag the image
+if [ -z "$latest_exists" ]; then
+    echo "Image isaac_ros_dev-aarch64:latest does not exist. Retagging..."
+    docker tag mzahana/isaac_ros_dev-aarch64:${TAG} isaac_ros_dev-aarch64:latest
+else
+    echo "Image isaac_ros_dev-aarch64:latest already exists. Doing nothing."
+fi
 
 source $HOME/.bashrc
 
