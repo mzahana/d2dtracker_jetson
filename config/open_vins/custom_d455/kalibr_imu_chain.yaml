@@ -1,0 +1,60 @@
+%YAML:1.0
+
+# Kalibr <-> open_vins convention
+# C_gyro_i <-> R_IMUtoGYRO
+# [gyro] M <-> Tw
+# [accel] M <-> Ta
+# A <-> Tg
+imu0:
+  T_i_b:
+    - [1.0, 0.0, 0.0, 0.0]
+    - [0.0, 1.0, 0.0, 0.0]
+    - [0.0, 0.0, 1.0, 0.0]
+    - [0.0, 0.0, 0.0, 1.0]
+  # Values from allan plots
+  # https://github.com/rpng/ar_table_dataset
+  #accelerometer_noise_density: 0.0010382453726199955
+  #accelerometer_random_walk: 4.132785219723178e-05
+  #gyroscope_noise_density: 0.00010272083263292572
+  #gyroscope_random_walk: 1.1106223553679963e-06
+  # Inflated values (to account for unmodelled effects)
+  # density x5
+  # walk x10
+  #Accelerometer
+  accelerometer_noise_density: 0.018325460766195713 
+  accelerometer_random_walk: 0.0031526548679969497 
+  #Gyroscope
+  gyroscope_noise_density: 0.005658445654838128
+  gyroscope_random_walk: 4.9244827968800026e-04  
+  rostopic: /camera/imu
+  time_offset: 0.0
+  update_rate: 200
+  # three different modes supported:
+  # "calibrated" (same as "kalibr"), "kalibr", "rpng"
+  model: "kalibr"
+  # how to get from Kalibr imu.yaml result file:
+  #   - Tw is imu0:gyroscopes:M:
+  #   - R_IMUtoGYRO: is imu0:gyroscopes:M:
+  #   - Ta is imu0:accelerometers:M:
+  #   - R_IMUtoACC not used by Kalibr
+  #   - Tg is imu0:gyroscopes:A:
+  Tw:
+    - [1.0252682843452035, 0.0, 0.0]
+    - [-0.009317074064285835, 1.0230957936554894, 0.0]
+    - [-0.0070358516203933375, 0.00319988649549574, 0.9995381578198]
+  R_IMUtoGYRO:
+    - [0.9999899802473953, -0.004167092535127969, -0.0016354646489026166]
+    - [0.004167688113960002, 0.9999912500158429, 0.00036092594374198517]
+    - [0.001633946326806948, -0.00036773843393135346, 0.9999985974929393]
+  Ta:
+    - [0.9850005161541593, 0.0, 0.0]
+    - [-0.0010659744348495597, 0.9928231590544696, 0.0]
+    - [0.0029035502259805745, 0.022543809972056676, 1.0016290323214185]
+  R_IMUtoACC:
+    - [ 1.0, 0.0, 0.0 ]
+    - [ 0.0, 1.0, 0.0 ]
+    - [ 0.0, 0.0, 1.0 ]
+  Tg:
+    - [1.4028016822296411e-05, -0.0004093748694620693, 6.83514932677649e-05]
+    - [0.0001130653242100852, 0.0016182902003747013, -0.0003721349646165901]
+    - [0.00014459152269515854, -8.962959661707025e-05, 6.527559317237045e-05]
