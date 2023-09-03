@@ -15,6 +15,7 @@ export RUN_KF=False
 export RUN_TRAJ_PRED=False
 export RUN_YOLO=False
 export RUN_YOLO_POSE=False
+export RUN_OPENVINS=False
 
 
 # The following code creates convenience aliases to be used inside the d2dtracker container
