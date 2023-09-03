@@ -33,7 +33,7 @@ if ! grep -qF "$line_to_check" "$bashrc_file"; then
 fi
 
 bashrc_file="$HOME/.bashrc"
-line_to_check="alias vins='ros2 launch ov_msckf subscribe.launch.py config_path:=/home/d2d/shared_volume/ros2_ws/src/open_vins/config/d455_custom/estimator_config.yaml'"
+line_to_check="alias viz='rviz2 -d /home/d2d/shared_volume/ros2_ws/src/open_vins/ov_msckf/launch/display_ros2.rviz'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
