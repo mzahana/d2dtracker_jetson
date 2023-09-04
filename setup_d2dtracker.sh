@@ -128,6 +128,40 @@ else
 fi
 
 #
+# mavlin-router
+#
+#deps
+sudo apt install -y git meson ninja-build pkg-config gcc g++ systemd python3-pip
+sudo pip3 install --upgrade meson
+cd $HOME
+print_info "installing mavlink-router ... " && sleep 1
+if [ ! -d "$HOME/mavlink-router" ]; then
+    cd $HOME
+    git clone https://github.com/mavlink-router/mavlink-router.git
+else
+    cd $HOME/mavlink-router
+    git pull origin master
+fi
+cd $HOME/mavlink-router
+git submodule update --init --recursive
+meson setup --buildtype=release build .
+ninja -C build
+sudo ninja -C build install
+print_info "Copying custom mavlink-router.service to /lib/systemd/system" && sleep 1
+sudo cp $ROOT/services/mavlink-router.service /lib/systemd/system/
+bashrc_file="$HOME/.bashrc"
+line_to_check="export MAVLINK_ROUTERD_CONF_FILE=$HOME/d2dtracker_jetson/config/mavlink-router/mavlink_router.conf"
+if ! grep -qF "$line_to_check" "$bashrc_file"; then
+    echo "$line_to_check" >> "$bashrc_file"
+    print_info "MAVLINK_ROUTERD_CONF_FILE is added to .bashrc file."
+else
+    print_warning "MAVLINK_ROUTERD_CONF_FILE already exists in .bashrc file. No changes made."
+fi
+sudo systemctl daemon-reload
+print_info "You can start mavlink-router using: sudo systemctl start mavlink-router.service" && sleep 1
+
+
+#
 # Arducam drivers
 #
 print_info "Installing Arducam drivers..." && sleep 1
@@ -139,3 +173,4 @@ echo "You can execute " && print_info "d2dtracker_container " && echo "to start 
 print_warning "If this is the first time you setup d2dtracker on Jetson, enter the container and run the setup.sh script inside the d2dtracker_system pkg, inside the container"
 
 print_info "DONE!"
+cd $HOME
