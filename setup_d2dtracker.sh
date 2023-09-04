@@ -149,8 +149,9 @@ ninja -C build
 sudo ninja -C build install
 print_info "Copying custom mavlink-router.service to /lib/systemd/system" && sleep 1
 sudo cp $ROOT/services/mavlink-router.service /lib/systemd/system/
+sudo cp $ROOT/config/mavlink-router/main.conf /etc/mavlink-router/
 bashrc_file="$HOME/.bashrc"
-line_to_check="export MAVLINK_ROUTERD_CONF_FILE=$HOME/d2dtracker_jetson/config/mavlink-router/mavlink_router.conf"
+line_to_check="export MAVLINK_ROUTERD_CONF_FILE=$HOME/d2dtracker_jetson/config/mavlink-router/main.conf"
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
     print_info "MAVLINK_ROUTERD_CONF_FILE is added to .bashrc file."
