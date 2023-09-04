@@ -1,0 +1,13 @@
+[Unit]
+Description=Runs the d2dtracker system
+Requires=docker.service
+After=docker.service
+
+[Service]
+User=hunter
+Group=hunter
+ExecStart=/home/hunter/d2dtracker_jetson/services/d2d_service.sh
+ExecStop=/usr/bin/docker stop d2dtracker-container
+
+[Install]
+WantedBy=multi-user.target
