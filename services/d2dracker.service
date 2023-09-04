@@ -1,7 +1,7 @@
 [Unit]
 Description=Runs the d2dtracker system
 Requires=docker.service
-After=docker.service
+After=network.target docker.service multi-user.target
 
 [Service]
 User=hunter
