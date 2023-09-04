@@ -45,20 +45,17 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         fi && \
         if [[ -f "\$HOME/shared_volume/bash.sh" ]]; then
             source \$HOME/shared_volume/bash.sh
-        fi && \
-         /bin/bash"
+        fi"
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
     CMD="export GIT_USER=$GIT_USER && export GIT_TOKEN=$GIT_TOKEN && $CMD"
 fi
 
-if [[ -n "$SUDO_PASSWORD" ]]; then
-    CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
+
+if [ "$RUN_SYSTEM" == "True" ]; then
+    CMD="$CMD && ros2 launch d2dtracker_system run_system.launch.py"
 fi
 
-if [[ -n "$SETUP_ISAAC_ROS" ]]; then
-    CMD="export SETUP_ISAAC_ROS=$SETUP_ISAAC_ROS && $CMD"
-fi
-
+CMD="$CMD && /bin/bash"
 
 if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
     if [ "$(docker ps -aq -f status=exited -f name=${CONTAINER_NAME})" ]; then
@@ -131,20 +128,13 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         fi && \
         if [[ -f "\$HOME/shared_volume/bash.sh" ]]; then
             source \$HOME/shared_volume/bash.sh
-        fi && \
-        /bin/bash"
+        fi"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
     CMD="export GIT_USER=$GIT_USER && export GIT_TOKEN=$GIT_TOKEN && $CMD"
 fi
 
-if [[ -n "$SUDO_PASSWORD" ]]; then
-    CMD="export SUDO_PASSWORD=$SUDO_PASSWORD && $CMD"
-fi
-
-if [[ -n "$SETUP_ISAAC_ROS" ]]; then
-    CMD="export SETUP_ISAAC_ROS=$SETUP_ISAAC_ROS && $CMD"
-fi
+CMD="$CMD && /bin/bash"
 
 HOST_DEV_DIR=$HOME/${CONTAINER_NAME}_shared_volume
 if [ ! -d "$HOST_DEV_DIR" ]; then
