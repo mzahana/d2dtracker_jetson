@@ -149,6 +149,10 @@ ninja -C build
 sudo ninja -C build install
 print_info "Copying custom mavlink-router.service to /lib/systemd/system" && sleep 1
 sudo cp $ROOT/services/mavlink-router.service /lib/systemd/system/
+if [ ! -d "/etc/mavlink-router" ]; then
+    cd $HOME
+    sudo mkdir -p /etc/mavlink-router
+fi
 sudo cp $ROOT/config/mavlink-router/main.conf /etc/mavlink-router/
 bashrc_file="$HOME/.bashrc"
 line_to_check="export MAVLINK_ROUTERD_CONF_FILE=$HOME/d2dtracker_jetson/config/mavlink-router/main.conf"
