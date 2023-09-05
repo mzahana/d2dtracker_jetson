@@ -206,6 +206,17 @@ fi
 
 ####################### Done with topic_tools #####################
 
+
+#
+# install d2dtracker.service
+#
+print_info "Copying d2dtracker.service to /etc/systemd/system/ " && sleep 1
+sudo cp $ROOT/services/d2dtracker.service /etc/systemd/system/
+sudo systemctl daemon-reload
+print_info "Enable d2dtracker.service using: sudo systemctl enable d2dtracker.service"
+print_info "Start d2dtracker.service using: sudo systemctl start d2dtracker.service" && sleep 1
+######################## Done with copying d2dtracker.service ##############
+
 #
 # Arducam drivers
 #
