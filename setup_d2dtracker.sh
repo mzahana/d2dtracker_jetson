@@ -114,6 +114,7 @@ else
 fi
 print_info "patching ROS2Visualizer.h ..." && sleep 1
 cp $ROOT/docker/patches/ROS2Visualizer.h $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/open_vins/ov_msckf/src/ros/
+####################### Done cloneing open_vins #####################
 
 #
 # Clone realsense-ros 4.51.1
@@ -126,9 +127,10 @@ else
     cd $ISAAC_ROS_WS/src/realsense-ros
     git checkout 4.51.1
 fi
+####################### Done with realsense-ros #####################
 
 #
-# mavlin-router
+# mavlink-router
 #
 #deps
 sudo apt install -y git meson ninja-build pkg-config gcc g++ systemd python3-pip
@@ -164,7 +166,33 @@ else
 fi
 sudo systemctl daemon-reload
 print_info "You can start mavlink-router using: sudo systemctl start mavlink-router.service" && sleep 1
+####################### Done with mavlink-router #####################
+#
+# mavros dependencies
+#
+print_info "Installing mavro dependencies..." && sleep 1
+sudo apt install -y python3-vcstool python3-rosinstall-generator python3-osrf-pycommon geographiclib-tools libgeographic-dev
 
+print_info "Cloning geographic_info  package ... " && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/geographic_info" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone -b 1.0.5 https://github.com/ros-geographic-info/geographic_info
+fi
+print_info "Cloning angles package ... " && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/angles" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone -b 1.15.0 https://github.com/ros/angles.git
+fi
+print_info "Cloning eigen_stl_containers package ... " && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/eigen_stl_containers" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone -b ros2 https://github.com/ros/eigen_stl_containers.git
+fi
+sudo geographiclib-get-geoids egm96-5
+sudo geographiclib-get-gravity egm96
+sudo geographiclib-get-magnetic emm2015
+pip3 install future
+####################### Done with mavros #####################
 
 #
 # Arducam drivers
