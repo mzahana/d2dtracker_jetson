@@ -267,6 +267,21 @@ RUN cd /opt/ros/humble && rm -rf build log src
 
 # RUN echo 'source /ros_entrypoint.sh' >> $HOME/.bashrc
 
+#
+# MAVROS dependencies
+#
+RUN  apt update && \
+    apt install -y \
+        python3-vcstool \
+        python3-rosinstall-generator \
+        python3-osrf-pycommon \
+        geographiclib-tools \
+        libgeographic-dev
+RUN  geographiclib-get-geoids egm96-5 && \
+    geographiclib-get-gravity egm96 && \
+    geographiclib-get-magnetic emm2015
+RUN pip3 install future
+
 # Setup non-root d2d user
 ARG USERNAME=d2d
 ARG USER_UID=1000

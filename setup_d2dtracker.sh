@@ -171,9 +171,7 @@ fi
 #
 # mavros dependencies
 #
-print_info "Installing mavro dependencies..." && sleep 1
-sudo apt install -y python3-vcstool python3-rosinstall-generator python3-osrf-pycommon geographiclib-tools libgeographic-dev
-
+# Some depndencies are installed in the docker image Dockerfile.d2dtracker
 print_info "Cloning geographic_info  package ... " && sleep 1
 if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/geographic_info" ]; then
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
@@ -189,10 +187,6 @@ if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/eigen_stl_container
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
     git clone -b ros2 https://github.com/ros/eigen_stl_containers.git
 fi
-sudo geographiclib-get-geoids egm96-5
-sudo geographiclib-get-gravity egm96
-sudo geographiclib-get-magnetic emm2015
-pip3 install future
 ####################### Done with mavros #####################
 
 #
@@ -217,6 +211,11 @@ print_info "Enable d2dtracker.service using: sudo systemctl enable d2dtracker.se
 print_info "Start d2dtracker.service using: sudo systemctl start d2dtracker.service" && sleep 1
 ######################## Done with copying d2dtracker.service ##############
 
+#
+# Add udev rules for /dev/ttyUSB0 so MAVROS can use it
+#
+
+######################33 Done with udev rules ###########
 #
 # Arducam drivers
 #
