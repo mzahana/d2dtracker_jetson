@@ -214,7 +214,9 @@ print_info "Start d2dtracker.service using: sudo systemctl start d2dtracker.serv
 #
 # Add udev rules for /dev/ttyUSB0 so MAVROS can use it
 #
-
+sudo cp $ROOT/docker/udev_rules/99-usb-serial.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger
 ######################33 Done with udev rules ###########
 #
 # Arducam drivers
