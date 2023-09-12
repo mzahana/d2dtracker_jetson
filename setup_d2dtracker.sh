@@ -50,18 +50,18 @@ TAG="${L4T_VERSION}"
 FULL_IMAGE_NAME="$IMAGE_NAME:$TAG"
 
 # Check if the image already exists locally
-docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1
+#docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1
 
 # $? is a special variable that holds the exit status of the last command executed
-if [ $? -eq 0 ]; then
+if docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1; then
   echo "Image $FULL_IMAGE_NAME already exists locally."
 else
     # Try to pull the image
     print_info "Trying to pull $FULL_IMAGE_NAME"
-    docker pull $FULL_IMAGE_NAME
+    #docker pull $FULL_IMAGE_NAME
 
     # Check if the pull was successful
-    if [ $? -eq 0 ]; then
+    if docker pull $FULL_IMAGE_NAME; then
         print_info "Successfully pulled $FULL_IMAGE_NAME"
     else
         print_error "Failed to pull $FULL_IMAGE_NAME, building locally..."
