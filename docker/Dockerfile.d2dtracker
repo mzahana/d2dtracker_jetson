@@ -245,17 +245,17 @@ RUN cd /opt/ros/humble/src && \
     git clone -b humble https://github.com/ros2/rviz.git && \
     git clone -b humble https://github.com/ros/resource_retriever.git && \
     git clone -b ros2 https://github.com/ros/diagnostics.git && \
-    git clone https://github.com/ros2-gbp/ignition_math6_vendor-release.git && cd ignition_math6_vendor-release && git checkout git checkout release/humble/ignition_math6_vendor/0.0.2-2 && cd .. && \
+    git clone https://github.com/ros2-gbp/ignition_math6_vendor-release.git && cd ignition_math6_vendor-release && git checkout release/humble/ignition_math6_vendor/0.0.2-2 && cd .. && \
     git clone https://github.com/ros2-gbp/ignition_cmake2_vendor-release.git && cd ignition_cmake2_vendor-release && git checkout release/humble/ignition_cmake2_vendor/0.0.2-2 && cd .. && \
     git clone https://github.com/ros2-gbp/interactive_markers-release.git && cd interactive_markers-release && git checkout release/humble/interactive_markers/2.3.2-2 && cd .. && \
     git clone https://github.com/ros2-gbp/laser_geometry-release.git && cd laser_geometry-release && git checkout release/humble/laser_geometry/2.4.0-2 && cd .. && \
     git clone https://github.com/ros2-gbp/navigation_msgs-release.git && cd navigation_msgs-release && git checkout release/humble/map_msgs/2.1.0-3
-RUN apt-get update && \
-    apt install -y qtbase5-dev libqt5svg5-dev libzmq3-dev libdw-dev libxaw7-dev && \
+RUN apt-get update \
+    && apt install -y qtbase5-dev libqt5svg5-dev libzmq3-dev libdw-dev libxaw7-dev \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-RUN cd /opt/ros/humble && colcon build --merge-install
+RUN cd /opt/ros/humble && source install/setup.bash && colcon build --merge-install
 RUN cd /opt/ros/humble && rm -rf build log src
 
 

@@ -124,7 +124,7 @@ if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/realsense-ros" ]; t
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
     git clone https://github.com/IntelRealSense/realsense-ros.git -b 4.51.1
 else
-    cd $ISAAC_ROS_WS/src/realsense-ros
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/realsense-ros
     git checkout 4.51.1
 fi
 ####################### Done with realsense-ros #####################
