@@ -47,6 +47,7 @@ d2dtracker_container
 cd $HOME/shared_volume/ros2_ws/src/d2dtracker_system/
 ./setup.sh
 ```
+**NOTE** `open_vins` is already cloned in the workspace during the setup of the d2dtracker system, and no need to setup a separate docker image for `open_vins`.
 
 ## Setup nvidia visual slam software (optional)
 If you wish to test the `isaac_ros_visual_slam` [system](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_visual_slam), you can build its independent docker image as follows.
@@ -133,3 +134,36 @@ ros2 launch ov_msckf subscribe.launch.py config:=euroc_mav
 * **IMPROTANT**:  To use `open_vins` with live IMU/camera system, you will need to calibrate your cameras using Kalibr, calibrate your IMU using `allan_ros2` package (only works with ROS foxy, for now), calibrate both cameras and IMU using Kalibr. Then, use the calibration files to update the configuratoin files for `open_vins`. An example of configuration files for the Realsense D455 camera see the [config/open_vins/custom_d455](config/open_vins/custom_d455) See below video link for a tutorial.
 * **Reference**: https://docs.openvins.com/gs-tutorial.html
 * **Video** : https://youtu.be/rBT5O5TEOV4
+
+# Automated System Startup
+A service is setup to start the d2dtracker system. The service file is called `d2dtracker.service` and is available in the `services` directory in this package, [here](services/d2dtracker.service).
+
+This service executes the file `/home/hunter/d2dtracker_jetson/services/d2d_service.sh`. You need to adjust the path according to your Jetson system setup. However, if you setup your jetson with username `hunter` and followed the setup instructions in this README, you won't need to change the path to this file.
+
+This script `/home/hunter/d2dtracker_jetson/services/d2d_service.sh` runs a few commands and then runs another script(`/home/hunter/d2dtracker_jetson/services/run_d2dtracker.sh`) that starts(or restarts) the d2dtracker-container which itself runs the required launch file inside the container `run_system.launch.py` located in the `d2dtracker_system` pkg
+
+For the first time only, you need to run the d2dtracker manually using the alias that was created during the setup process
+```bash
+d2dtracker_container
+```
+Once the container is run (and not removed), you can use the service to automatically startup  the system.
+
+Enable d2dtracker.service using: 
+```bash
+sudo systemctl enable d2dtracker.service
+```
+
+You can disable the service using
+```bash
+sudo systemctl disable d2dtracker.service
+```
+
+Then you can start the service using
+```bash
+sudo systemctl start d2dtracker.service
+```
+
+Then you can stop the service using
+```bash
+sudo systemctl stop d2dtracker.service
+```
