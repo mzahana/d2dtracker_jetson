@@ -194,13 +194,13 @@ print_info "Cloning mavlink package ... " && sleep 1
 if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/mavlink" ]; then
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
     git clone  https://github.com/ros2-gbp/mavlink-gbp-release.git mavlink
-    d $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/mavlink && git checkout release/humble/mavlink/2023.9.9-1
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/mavlink && git checkout release/humble/mavlink/2023.9.9-1
 fi
 print_info "Cloning mavros package ... " && sleep 1
 if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/mavros" ]; then
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
     git clone  https://github.com/mavlink/mavros.git
-    d $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/mavros && git checkout 2.6.0
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/mavros && git checkout 2.6.0
 fi
 ####################### Done with mavros #####################
 
