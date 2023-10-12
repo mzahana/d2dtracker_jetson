@@ -176,7 +176,9 @@ ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt /u
 # RUN python3 -m pip install --upgrade pip wheel
 # RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx thop "numpy==1.23"
 COPY ultralytics/requirements.txt usr/src/ultralytics
+# Use Ultralytics version 8.0.162 with yolov8_ros 2.0.1
 RUN cd /usr/src/ultralytics \
+    git checkout b638c4ed \
     && pip install --no-cache .
 
 # # Set environment variables
@@ -281,6 +283,9 @@ RUN  geographiclib-get-geoids egm96-5 && \
     geographiclib-get-gravity egm96 && \
     geographiclib-get-magnetic emm2015
 RUN pip3 install future
+
+# Required for ultralytics
+RUN pip3 install lapx>=0.5.2
 
 # Setup non-root d2d user
 ARG USERNAME=d2d
