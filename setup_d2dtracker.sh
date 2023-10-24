@@ -52,22 +52,27 @@ FULL_IMAGE_NAME="$IMAGE_NAME:$TAG"
 # Check if the image already exists locally
 #docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1
 
-# $? is a special variable that holds the exit status of the last command executed
-if docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1; then
-  echo "Image $FULL_IMAGE_NAME already exists locally."
+if [[ "$FORCE_BUILD" == "true" ]]; then
+	print_info "FORCE_BUILD: Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
+	cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
 else
-    # Try to pull the image
-    print_info "Trying to pull $FULL_IMAGE_NAME"
-    #docker pull $FULL_IMAGE_NAME
+	# $? is a special variable that holds the exit status of the last command executed
+	if docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1; then
+	  print_info "Image $FULL_IMAGE_NAME already exists locally."
+	else
+	    # Try to pull the image
+	    print_info "Trying to pull $FULL_IMAGE_NAME"
+	    #docker pull $FULL_IMAGE_NAME
 
-    # Check if the pull was successful
-    if docker pull $FULL_IMAGE_NAME; then
-        print_info "Successfully pulled $FULL_IMAGE_NAME"
-    else
-        print_error "Failed to pull $FULL_IMAGE_NAME, building locally..."
-        print_info "Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
-        cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
-    fi
+	    # Check if the pull was successful
+	    if docker pull $FULL_IMAGE_NAME; then
+		print_info "Successfully pulled $FULL_IMAGE_NAME"
+	    else
+		print_error "Failed to pull $FULL_IMAGE_NAME, building locally..."
+		print_info "Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
+		cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
+	    fi
+	fi
 fi
 
 source $HOME/.bashrc

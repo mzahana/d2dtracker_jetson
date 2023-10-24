@@ -49,6 +49,18 @@ cd $HOME/shared_volume/ros2_ws/src/d2dtracker_system/
 ```
 **NOTE** `open_vins` is already cloned in the workspace during the setup of the d2dtracker system, and no need to setup a separate docker image for `open_vins`.
 
+### Update d2dtracker docker image
+* Pull the latest version of this repo
+	```bash
+	cd $HOME/d2dtracker_jetson
+	git pull origin main
+	```
+* Re-build d2dtracker docker image
+	```bash
+	export FROCE_BUILD=true
+	./setup_d2dtracker.sh
+	```
+
 ## Setup nvidia visual slam software (optional)
 If you wish to test the `isaac_ros_visual_slam` [system](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_visual_slam), you can build its independent docker image as follows.
 
