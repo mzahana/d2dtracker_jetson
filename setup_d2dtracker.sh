@@ -240,11 +240,30 @@ sudo udevadm trigger
 ######################33 Done with udev rules ###########
 #
 # Arducam drivers
+# This is to use Arducam camera array adapter
+# Example product: 
+#   https://www.uctronics.com/arducam-1mp-4-quadrascopic-camera-bundle-kit-for-raspberry-pi-nvidia-jetson-nano-xavier-nx.html
 #
 print_info "Installing Arducam drivers..." && sleep 1
 print_warning "Reboot your device after this step" && sleep 2
 
-source $ROOT/scripts/arducam_drivers.sh
+cd ${HOME}
+sudo apt-get install v4l-utils -y
+
+wget https://bootstrap.pypa.io/get-pip.py  
+sudo python3 get-pip.py  
+sudo pip3 install v4l2-fix
+
+# Install Jtop
+sudo pip3 install -U jetson-stats
+
+# REF: https://docs.arducam.com/Nvidia-Jetson-Camera/Jetvariety-Camera/Quick-Start-Guide/
+cd ${HOIME}
+wget https://github.com/ArduCAM/MIPI_Camera/releases/download/v0.0.3/install_full.sh
+chmod +x install_full.sh
+./install_full.sh -m arducam
+
+# source $ROOT/scripts/arducam_drivers.sh
 
 echo "You can execute " && print_info "d2dtracker_container " && echo "to start the d2dtracker-container"
 print_warning "If this is the first time you setup d2dtracker on Jetson, enter the container and run the setup.sh script inside the d2dtracker_system pkg, inside the container"
