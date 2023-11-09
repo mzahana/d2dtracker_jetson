@@ -14,6 +14,7 @@ export RUN_YOLO_POSE=False
 export RUN_OPENVINS=False
 export RUN_MAVROS=False
 export RUN_MAVROS_TFS=False
+export RUN_ARDUCAM_STEREO=False
 
 
 # The following code creates convenience aliases to be used inside the d2dtracker container
