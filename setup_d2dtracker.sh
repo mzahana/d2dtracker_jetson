@@ -46,7 +46,7 @@ fi
 
 # Define the image name and tag
 IMAGE_NAME="mzahana/d2dtracker-jetson"
-TAG="${L4T_VERSION}"
+TAG="r${L4T_VERSION}"
 FULL_IMAGE_NAME="$IMAGE_NAME:$TAG"
 
 # Check if the image already exists locally
