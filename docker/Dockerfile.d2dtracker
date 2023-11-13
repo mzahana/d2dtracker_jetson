@@ -175,12 +175,11 @@ ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt /u
 # # Install pip packages manually for TensorRT compatibility https://github.com/NVIDIA/TensorRT/issues/2567
 # RUN python3 -m pip install --upgrade pip wheel
 # RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx thop "numpy==1.23"
-COPY ultralytics/requirements.txt usr/src/ultralytics
 # Use Ultralytics version 8.0.162 with yolov8_ros 2.0.1
 RUN cd /usr/src/ultralytics \
     && git checkout b638c4ed \
     && pip install --no-cache .
-
+COPY ultralytics/requirements.txt usr/src/ultralytics
 # # Set environment variables
 ENV OMP_NUM_THREADS=1
 
