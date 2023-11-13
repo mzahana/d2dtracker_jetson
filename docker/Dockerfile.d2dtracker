@@ -177,9 +177,10 @@ ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt /u
 # RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx thop "numpy==1.23"
 # Use Ultralytics version 8.0.162 with yolov8_ros 2.0.1
 RUN cd /usr/src/ultralytics \
-    && git checkout b638c4ed \
-    && pip install --no-cache .
-COPY ultralytics/requirements.txt usr/src/ultralytics
+    && git checkout b638c4ed
+COPY ultralytics/requirements.txt /usr/src/ultralytics
+RUN  cd /usr/src/ultralytics && pip install --no-cache .
+
 # # Set environment variables
 ENV OMP_NUM_THREADS=1
 
