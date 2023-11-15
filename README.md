@@ -3,6 +3,8 @@ This package can be used to set up the D2DTracker system on Nvidia Jetson paltfo
 
 # Supported Jetpacks
 * JetPack `5.1.1`. Uses NVIDIA `L4T 35.3.1`
+* JetPack `5.1.2`. Uses NVIDIA `L4T 35.4.1`
+* `L4T 35.1.0`
 
 # Quick Setup
 
