@@ -43,8 +43,8 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         if [[ -f "\$HOME/shared_volume/ros2_ws/install/setup.bash" ]]; then
             source \$HOME/shared_volume/ros2_ws/install/setup.bash
         fi && \
-        if [[ -f "\$HOME/shared_volume/bash.sh" ]]; then
-            source \$HOME/shared_volume/bash.sh
+        if [[ -f "\$HOME/shared_volume/config.sh" ]]; then
+            source \$HOME/shared_volume/config.sh
         fi"
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then
     CMD="export GIT_USER=$GIT_USER && export GIT_TOKEN=$GIT_TOKEN && $CMD"
@@ -126,8 +126,8 @@ CMD="export DEV_DIR=\$HOME/shared_volume && \
         if [ -d "\$HOME/shared_volume/ros2_ws/install" ]; then
             source \$HOME/shared_volume/ros2_ws/install/setup.bash
         fi && \
-        if [[ -f "\$HOME/shared_volume/bash.sh" ]]; then
-            source \$HOME/shared_volume/bash.sh
+        if [[ -f "\$HOME/shared_volume/config.sh" ]]; then
+            source \$HOME/shared_volume/config.sh
         fi"
 
 if [[ -n "$GIT_TOKEN" ]] && [[ -n "$GIT_USER" ]]; then

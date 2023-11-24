@@ -74,8 +74,8 @@ CMD="export DEV_DIR=/workspaces && \
         if [[ -f "/workspaces/isaac_ros-dev/install/setup.bash" ]]; then
             source /workspaces/isaac_ros-dev/install/setup.bash
         fi && \
-        if [[ -f "/workspaces/bash.sh" ]]; then
-            source /workspaces/bash.sh
+        if [[ -f "/workspaces/config.sh" ]]; then
+            source /workspaces/config.sh
         fi && \
          /bin/bash"
 
@@ -151,8 +151,8 @@ CMD="export DEV_DIR=/workspaces && \
         if [ -f "/workspaces/isaac_ros-dev/install/setup.bash" ]; then
             source /workspaces/isaac_ros-dev/install/setup.bash
         fi && \
-        if [[ -f "/workspaces/bash.sh" ]]; then
-            source /workspaces/bash.sh
+        if [[ -f "/workspaces/config.sh" ]]; then
+            source /workspaces/config.sh
         fi && \
         /bin/bash"
 
