@@ -3,6 +3,9 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 # export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export ROS_DOMAIN_ID=17
 
+#
+# Modules
+#
 export RUN_XRCE=False
 export RUN_REALSENSE=False
 export RUN_SLAM=False
@@ -15,6 +18,34 @@ export RUN_OPENVINS=False
 export RUN_MAVROS=False
 export RUN_MAVROS_TFS=False
 export RUN_ARDUCAM_STEREO=False
+
+#
+# MAVROS variables
+#
+export MAVROS_FCU_URL='/dev/ttyUSB0:921600'
+# Example: export MAVROS_GCS_URL='udp://:14550@192.168.1.151:14550'
+export MAVROS_GCS_URL=''
+# Example: export MAVROS_PLUGINLIST_YAML='/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/px4_pluginlists.yaml'
+export MAVROS_PLUGINLIST_YAML=''
+
+#
+# OpenVins
+#
+# Example: export OPENVINS_YAML='/home/d2d/shared_volume/ros2_ws/src/open_vins/config/custom_d455/estimator_config.yaml'
+export OPENVINS_YAML=''
+
+#
+# Kalman filter
+#
+# Example: export KF_YAML='/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/kf_param.yaml'
+export KF_YAML=''
+
+#
+# Yolov8
+#
+# Example export YOLOV8_MODEL_PATH='/home/d2d/shared_volume/ros2_ws/src/d2dtracker_drone_detector/config/drone_detection_v3.pt'
+export YOLOV8_MODEL_PATH=''
+
 
 
 # The following code creates convenience aliases to be used inside the d2dtracker container
