@@ -42,8 +42,8 @@ if [ ! -d "$HOME/workspaces/isaac_ros-dev" ]; then
     mkdir -p $HOME/workspaces/isaac_ros-dev/src
 fi
 
-print_info "copying bash.sh to container shared volume at ${HOME}/workspaces/" && sleep 1
-cp $ROOT/scripts/bash.sh ${HOME}/workspaces/
+print_info "copying config.sh to container shared volume at ${HOME}/workspaces/" && sleep 1
+cp $ROOT/scripts/config.sh ${HOME}/workspaces/
 
 print_info "Cloning Nvidia ROS packages ..."
 sleep 1
@@ -141,8 +141,8 @@ cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_co
 print_info "Copying build_vslam_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
 cp $ROOT/scripts/build_vslam_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 
-# print_info "Copying bash.sh to ~/workspaces/" && sleep 1
-# cp $ROOT/scripts/bash.sh $WORKSPACES_PATH/
+# print_info "Copying config.sh to ~/workspaces/" && sleep 1
+# cp $ROOT/scripts/config.sh $WORKSPACES_PATH/
 
 print_info "Copying vslam_realsense.launch.py to $ISAAC_ROS_WS/src/isaac_ros_visual_slam/isaac_ros_visual_slam/launch" && sleep 1
 cp $ROOT/launch/vslam_realsense.launch.py $ISAAC_ROS_WS/src/isaac_ros_visual_slam/isaac_ros_visual_slam/launch
