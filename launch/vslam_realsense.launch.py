@@ -58,7 +58,8 @@ def generate_launch_description():
                     'enable_observations_view': True,
                     'map_frame': 'map',
                     'odom_frame': 'odom',
-                    'base_frame': 'camera_link',
+                    #'base_frame': 'camera_link',
+                    'base_frame': 'base_link',
                     'input_imu_frame': 'camera_gyro_optical_frame',
                     'enable_imu_fusion': True,
                     'gyro_noise_density': 0.000244,
@@ -72,7 +73,8 @@ def generate_launch_description():
                     ('stereo_camera/left/camera_info', 'camera/infra1/camera_info'),
                     ('stereo_camera/right/image', 'camera/infra2/image_rect_raw'),
                     ('stereo_camera/right/camera_info', 'camera/infra2/camera_info'),
-                    ('visual_slam/imu', 'camera/imu')]
+                    ('visual_slam/imu', 'camera/imu'),
+                    ('visual_slam/tracking/odometry', 'mavros/odometry/out')]
     )
 
     visual_slam_launch_container = ComposableNodeContainer(

@@ -27,7 +27,9 @@ export MAVROS_FCU_URL='/dev/ttyUSB0:921600'
 export MAVROS_GCS_URL=''
 # Example: export MAVROS_PLUGINLIST_YAML='/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/px4_pluginlists.yaml'
 export MAVROS_PLUGINLIST_YAML=''
-
+# export MAVROS_PX4_YAML='/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/px4_config.yaml'
+export MAVROS_PX4_YAML=''
+export MAVLINK_ID='1'
 #
 # OpenVins
 #
