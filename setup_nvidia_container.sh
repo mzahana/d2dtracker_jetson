@@ -85,6 +85,42 @@ else
 fi
 
 #
+# isaac_ros_object_detection
+#
+if [ ! -d "$ISAAC_ROS_WS/src/isaac_ros_object_detection" ]; then
+    cd $ISAAC_ROS_WS/src
+    git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_object_detection.git
+else
+    print_info "Pulling latest isaac_ros_object_detection..." && sleep 1
+    cd $ISAAC_ROS_WS/src/isaac_ros_object_detection
+    git pull origin main
+fi
+
+#
+# isaac_ros_dnn_stereo_depth
+#
+if [ ! -d "$ISAAC_ROS_WS/src/isaac_ros_dnn_stereo_depth" ]; then
+    cd $ISAAC_ROS_WS/src
+    git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_dnn_stereo_depth.git
+else
+    print_info "Pulling latest isaac_ros_dnn_stereo_depth..." && sleep 1
+    cd $ISAAC_ROS_WS/src/isaac_ros_dnn_stereo_depth
+    git pull origin main
+fi
+
+#
+# isaac_ros_system
+#
+if [ ! -d "$ISAAC_ROS_WS/src/isaac_ros_system" ]; then
+    cd $ISAAC_ROS_WS/src
+    git clone https://github.com/mzahana/isaac_ros_system.git
+else
+    print_info "Pulling latest isaac_ros_system..." && sleep 1
+    cd $ISAAC_ROS_WS/src/isaac_ros_system
+    git pull origin main
+fi
+
+#
 # Setup the udev rules of Realsense camera
 if [ ! -d "$HOME/src" ]; then
     mkdir $HOME/src
@@ -121,9 +157,9 @@ cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 touch .isaac_ros_common-config && \
 echo CONFIG_IMAGE_KEY=ros2_humble.realsense > .isaac_ros_common-config
 
-# run_vslam.sh
-print_info "Copying run_vslam.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
-cp $ROOT/scripts/run_vslam.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+# run_nvidia_container.sh
+print_info "Copying run_nvidia_container.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
+cp $ROOT/scripts/run_nvidia_container.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 
 # Dockerfile.realsense
 print_info "Copying Dockerfile.realsense to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
@@ -137,9 +173,9 @@ cp $ROOT/docker/Dockerfile.user $ISAAC_ROS_WS/src/isaac_ros_common/docker/
 print_info "Copying modified-workspace-entrypoint.sh to $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts" && sleep 1
 cp $ROOT/scripts/modified-workspace-entrypoint.sh $ISAAC_ROS_WS/src/isaac_ros_common/docker/scripts/
 
-# build_vslam_image.sh
-print_info "Copying build_vslam_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
-cp $ROOT/scripts/build_vslam_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
+# build_nvidia_image.sh
+print_info "Copying build_nvidia_image.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts" && sleep 1
+cp $ROOT/scripts/build_nvidia_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts/
 
 # print_info "Copying config.sh to ~/workspaces/" && sleep 1
 # cp $ROOT/scripts/config.sh $WORKSPACES_PATH/
@@ -147,30 +183,6 @@ cp $ROOT/scripts/build_vslam_image.sh $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 print_info "Copying vslam_realsense.launch.py to $ISAAC_ROS_WS/src/isaac_ros_visual_slam/isaac_ros_visual_slam/launch" && sleep 1
 cp $ROOT/launch/vslam_realsense.launch.py $ISAAC_ROS_WS/src/isaac_ros_visual_slam/isaac_ros_visual_slam/launch
 
-
-# if [[ ! -d "$ISAAC_ROS_WS/src/isaac_ros_common/docker/libs"  ]]; then
-#     cd $ISAAC_ROS_WS/src/isaac_ros_common/docker && mkdir libs
-# fi
-
-# print_info "Copying nvToolsExt.h"
-# cp $ROOT/libs/nvToolsExt.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
-# print_info "Copying libnvToolsExt.so"
-# cp $ROOT/libs/libnvToolsExt.so $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
-
-# print_info "Copying cusparse.h to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-# cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusparse.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
-
-# print_info "Copying libcusparse.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-# cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusparse.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
-
-# print_info "Copying libcusolver.so.11 to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-# cp /usr/local/cuda-11.4/targets/aarch64-linux/lib/libcusolver.so.11 $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
-
-# print_info "Copying cusolverDn.h to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-# cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolverDn.h $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
-
-# print_info "Copying cusolve* to $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/" && sleep 1
-# cp /usr/local/cuda-11.4/targets/aarch64-linux/include/cusolver* $ISAAC_ROS_WS/src/isaac_ros_common/docker/libs/
 
 bashrc_file="$HOME/.bashrc"
 line_to_check="alias isaac_ros_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_dev.sh'"
@@ -183,23 +195,23 @@ else
 fi
 
 bashrc_file="$HOME/.bashrc"
-line_to_check="alias vslam_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_vslam.sh'"
+line_to_check="alias nvidia_container='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/run_nvidia_container.sh'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    print_info "vslam_container alias added to .bashrc file."
+    print_info "nvidia_container alias added to .bashrc file."
 else
-    print_warning "vslam_container alias already exists in .bashrc file. No changes made."
+    print_warning "nvidia_container alias already exists in .bashrc file. No changes made."
 fi
 
 bashrc_file="$HOME/.bashrc"
-line_to_check="alias build_vslam_image='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/build_vslam_image.sh'"
+line_to_check="alias build_nvidia_image='. $ISAAC_ROS_WS/src/isaac_ros_common/scripts/build_nvidia_image.sh'"
 
 if ! grep -qF "$line_to_check" "$bashrc_file"; then
     echo "$line_to_check" >> "$bashrc_file"
-    print_info "build_vslam_image alias added to .bashrc file."
+    print_info "build_nvidia_image alias added to .bashrc file."
 else
-    print_warning "build_vslam_image alias already exists in .bashrc file. No changes made."
+    print_warning "build_nvidia_image alias already exists in .bashrc file. No changes made."
 fi
 
 # Define the image name and tag
@@ -221,8 +233,8 @@ else
         print_info "Successfully pulled $FULL_IMAGE_NAME"
     else
         print_error "Failed to pull $FULL_IMAGE_NAME, building locally..."
-        print_info "Building vslam-image ..."
-        cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts && ./build_vslam_image.sh
+        print_info "Building nvidia-image ..."
+        cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts && ./build_nvidia_image.sh
     fi
 fi
 
@@ -240,6 +252,6 @@ fi
 
 source $HOME/.bashrc
 
-echo "Execute " && print_info "vslam_container " && echo "to start the vslam-container"
+echo "Execute " && print_info "nvidia_container " && echo "to start the nvidia-container"
 
 print_info "DONE!"

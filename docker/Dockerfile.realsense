@@ -26,3 +26,10 @@ RUN  chmod +x /usr/local/bin/scripts/*.sh
 RUN apt update \
     && apt install -y bash-completion nano \
     && source /etc/bash_completion
+
+# Install some ISAAC ROS dependencies
+RUN apt update && apt-get install -y \
+                    ros-humble-isaac-ros-ess \
+                    ros-humble-isaac-ros-test \
+                    ros-humble-isaac-ros-yolov8 \
+                    ros-humble-isaac-ros-visual-slam

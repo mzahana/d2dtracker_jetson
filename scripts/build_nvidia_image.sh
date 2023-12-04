@@ -94,7 +94,7 @@ PLATFORM="$(uname -m)"
 
 BASE_NAME="isaac_ros_dev-$PLATFORM"
 # CONTAINER_NAME="$BASE_NAME-container"
-CONTAINER_NAME="vslam-container"
+CONTAINER_NAME="nvidia-container"
 
 # Remove any exited containers.
 if [ "$(docker ps -a --quiet --filter status=exited --filter name=$CONTAINER_NAME)" ]; then

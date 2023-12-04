@@ -63,19 +63,19 @@ cd $HOME/shared_volume/ros2_ws/src/d2dtracker_system/
 	./setup_d2dtracker.sh
 	```
 
-## Setup nvidia visual slam software (optional)
-If you wish to test the `isaac_ros_visual_slam` [system](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_visual_slam), you can build its independent docker image as follows.
+## Setup nvidia ISAAC ROS packages
+fro example, if you wish to test the `isaac_ros_visual_slam` [system](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_visual_slam), you can build its independent docker image as follows.
 
-* Enter the repo's directory and execute the `setup_vslam.sh` script
+* Enter the repo's directory and execute the `setup_nvidia_container.sh` script
     ```bash
     cd $HOME/d2dtracker_jetson
-    ./setup_vslam.sh
+    ./setup_nvidia_container.sh
     ```
     **NOTE: Provide `sudo` password when asked.**
 
 * `source $HOME/.bashrc`
 
-* run `vslam_container` alias to enter the container
+* run `nvidia_container` alias to enter the container
 * After entering the container for the 1st time, you need to build the workspace.
     ```bash
     cd /workspaces/isaac_ros-dev
@@ -127,12 +127,18 @@ ros2 launch d2dtracker_system run_system.launch.py
 
 ```bash
 source $HOME/.bashrc
-vslam_container
+nvidia_container
 ```
 * To use Realsense camera (e.g. D455), connect it (before you power up the board) and run
 ```bash
 ros2 launch isaac_ros_visual_slam vslam_realsense.launch.py
 ```
+
+## isaac_ros_yolov8
+TODO
+
+## isaac_ros_dnn_stereo_depth
+TODO
 
 ## open_vins
 ```bash
