@@ -79,7 +79,7 @@ fro example, if you wish to test the `isaac_ros_visual_slam` [system](https://gi
 * After entering the container for the 1st time, you need to build the workspace.
     ```bash
     cd /workspaces/isaac_ros-dev
-    colcon build
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
     ```
 ## Setup the openvins container(optional)
 
