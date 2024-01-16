@@ -118,7 +118,7 @@ Follow these steps if you wish to build an independent docker image to test [ope
     ```bash
     source ~/shared_volume/ros2_ws/install/setup.bash
     ```
-* Inside the `d2dtracker-container`, there is a `bash.sh` script inside `$HOME/shared_volume`. Edit which module you wish to run (set its flag to `True`), save and close it. Source the `bash.sh` script. Then, run
+* Inside the `d2dtracker-container`, there is a `config.sh` script inside `$HOME/shared_volume`. Edit which module you wish to run (set its flag to `True`), save and close it. Source the `config.sh` script. Then, run
 ```bash
 ros2 launch d2dtracker_system run_system.launch.py
 ```
