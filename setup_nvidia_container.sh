@@ -2,6 +2,7 @@
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $ROOT/utils/print_color.sh
+source $ROOT/utils/l4t_version.sh
 
 sudo cp $ROOT/scripts/daemon.json /etc/docker/daemon.json
 print_info "daemon.json is copied to /etc/docker/daemon.json"
