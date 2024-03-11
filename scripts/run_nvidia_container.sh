@@ -66,8 +66,7 @@ fi
 PLATFORM="$(uname -m)"
 
 BASE_NAME="isaac_ros_dev-$PLATFORM"
-# CONTAINER_NAME="$BASE_NAME-container"
-CONTAINER_NAME="vslam-container"
+CONTAINER_NAME="nvidia-container"
 
 
 CMD="export DEV_DIR=/workspaces && \
@@ -78,18 +77,6 @@ CMD="export DEV_DIR=/workspaces && \
             source /workspaces/config.sh
         fi && \
          /bin/bash"
-
-# Re-use existing container.
-# if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
-#     print_info "Attaching to running container: $CONTAINER_NAME"
-#     docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME /bin/bash $@
-#     exit 0
-# fi
-# if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
-#     print_info "Attaching to running container: $CONTAINER_NAME"
-#     docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME bash -c "${CMD}"
-#     exit 0
-# fi
 
 if [ "$(docker ps -aq -f name=${CONTAINER_NAME})" ]; then
     if [ "$(docker ps -aq -f status=exited -f name=${CONTAINER_NAME})" ]; then

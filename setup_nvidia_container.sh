@@ -50,6 +50,18 @@ print_info "Cloning Nvidia ROS packages ..."
 sleep 1
 
 #
+# isaac_ros_apriltag
+#
+if [ ! -d "$ISAAC_ROS_WS/src/isaac_ros_apriltag" ]; then
+    cd $ISAAC_ROS_WS/src
+    git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_apriltag.git
+else
+    print_info "Pulling latest isaac_ros_apriltag..." && sleep 1
+    cd $ISAAC_ROS_WS/src/isaac_ros_apriltag
+    git pull origin main
+fi
+
+#
 # isaac_ros_visual_slam
 #
 if [ ! -d "$ISAAC_ROS_WS/src/isaac_ros_visual_slam" ]; then
@@ -156,7 +168,7 @@ if [ -f "$ISAAC_ROS_WS/src/isaac_ros_common/scripts/.isaac_ros_common-config" ];
 fi
 cd $ISAAC_ROS_WS/src/isaac_ros_common/scripts
 touch .isaac_ros_common-config && \
-echo CONFIG_IMAGE_KEY=ros2_humble.realsense > .isaac_ros_common-config
+echo CONFIG_IMAGE_KEY=ros2_humble.realsense.isaac > .isaac_ros_common-config
 
 # run_nvidia_container.sh
 print_info "Copying run_nvidia_container.sh to $ISAAC_ROS_WS/src/isaac_ros_common/scripts " && sleep 1
@@ -165,6 +177,10 @@ cp $ROOT/scripts/run_nvidia_container.sh $ISAAC_ROS_WS/src/isaac_ros_common/scri
 # Dockerfile.realsense
 print_info "Copying Dockerfile.realsense to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
 cp $ROOT/docker/Dockerfile.realsense $ISAAC_ROS_WS/src/isaac_ros_common/docker/
+
+# Dockerfile.isaac
+print_info "Copying Dockerfile.isaac to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
+cp $ROOT/docker/Dockerfile.isaac $ISAAC_ROS_WS/src/isaac_ros_common/docker/
 
 # Dockerfile.user
 print_info "Copying Dockerfile.user to $ISAAC_ROS_WS/src/isaac_ros_common/docker" && sleep 1
