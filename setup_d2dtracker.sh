@@ -220,6 +220,32 @@ fi
 
 ####################### Done with topic_tools #####################
 
+#
+# apriltag
+#
+print_info "Cloning apriltag package ... " && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/apriltag" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone https://github.com/AprilRobotics/apriltag.git
+fi
+
+#
+# apriltag_ros
+#
+print_info "Cloning apriltag_ros package ... " && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/apriltag_ros" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone https://github.com/mzahana/apriltag_ros.git
+fi
+
+#
+# apriltag_tools_ros
+#
+print_info "Cloning apriltag_tools_ros package ... " && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/apriltag_tools_ros" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone https://github.com/khaledgabr77/apriltag_tools_ros.git
+fi
 
 #
 # install d2dtracker.service

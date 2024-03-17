@@ -18,6 +18,7 @@ export RUN_OPENVINS=False
 export RUN_MAVROS=False
 export RUN_MAVROS_TFS=False
 export RUN_ARDUCAM_STEREO=False
+export RUN_APRILTAG=False
 
 #
 # MAVROS variables
@@ -48,7 +49,14 @@ export KF_YAML=''
 # Example export YOLOV8_MODEL_PATH='/home/d2d/shared_volume/ros2_ws/src/d2dtracker_drone_detector/config/drone_detection_v3.pt'
 export YOLOV8_MODEL_PATH=''
 
-
+#
+# apriltag_ros variables
+#
+# Example export APRILTAG_PARAMS_YAML='/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/apriltag_params.yaml'
+# Example export APRILTAG_TAGS_YAML='/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/tags.yaml'
+export APRILTAG_PARAMS_YAML=''
+export APRILTAG_TAGS_YAML=''
+export APRILTAG_PARENT_FRAME='odom'
 
 # The following code creates convenience aliases to be used inside the d2dtracker container
 bashrc_file="$HOME/.bashrc"
