@@ -19,6 +19,9 @@ export RUN_MAVROS=False
 export RUN_MAVROS_TFS=False
 export RUN_ARDUCAM_STEREO=False
 export RUN_APRILTAG=False
+export RUN_GRU_PATH_PREDICTOR=False
+export RUN_MPC_TRAJ_GENERATION=False
+export RUN_GEOMETRIC_CONTROLLER=False
 
 #
 # MAVROS variables
@@ -57,6 +60,26 @@ export YOLOV8_MODEL_PATH=''
 export APRILTAG_PARAMS_YAML=''
 export APRILTAG_TAGS_YAML=''
 export APRILTAG_PARENT_FRAME='odom'
+
+#
+# drone_path_predictor_ros
+#
+# Example: GRU_YAML_FILE=/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/gru.yaml
+export GRU_YAML_FILE=''
+
+#
+# trajectory_generation
+#
+# Example: MPC_TRAJ_GEN_YAML_FILE=/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/mpc_traj_gen.yaml
+export MPC_TRAJ_GEN_YAML_FILE=''
+
+#
+# mav_controllers_ros (geometric controller)
+#
+# Example: GEOMETRIC_CONTROLLER_YAML_FILE=/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/geometric_controller.yaml
+# Example: GEOMETRIC_MAVROS_YAML_FILE=/home/d2d/shared_volume/ros2_ws/src/d2dtracker_system/config/geometric_mavros.yaml
+export GEOMETRIC_CONTROLLER_YAML_FILE=''
+export GEOMETRIC_MAVROS_YAML_FILE=''
 
 # The following code creates convenience aliases to be used inside the d2dtracker container
 bashrc_file="$HOME/.bashrc"
