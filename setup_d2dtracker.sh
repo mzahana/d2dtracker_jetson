@@ -17,7 +17,7 @@ sudo systemctl daemon-reload && sudo systemctl restart docker
 print_info "Install Git LFS in order to pull down all large files..."
 sleep 1
 
-sudo apt-get update && sudo apt-get install git python3-pip
+sudo apt-get update && sudo apt-get install -y git python3-pip
 if [ ! -d "${HOME}/jetson-containers" ]; then
     print_info "Cloning jetson-containers repo ..."
     cd ${HOME} && git clone --depth=1 https://github.com/dusty-nv/jetson-containers
