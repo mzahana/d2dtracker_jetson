@@ -88,7 +88,7 @@ else
             
             print_info "Building ros2_humble+pytorch+torchvision docker layer"
             cd ${HOME}/jetson-containers
-            ./build.sh --name=ros_humble_pytroch pytorch torchvision ros:humble-desktop
+            ./build.sh --name=ros_humble_pytorch pytorch torchvision ros:humble-desktop
 
             print_info "Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
             cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
