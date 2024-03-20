@@ -248,6 +248,15 @@ if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/apriltag_tools_ros"
 fi
 
 #
+# diagnostics , required by realsense_camera ros pkg
+#
+print_info "Cloning diagnostics package ... " && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/diagnostics" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone -b ros2 https://github.com/ros/diagnostics.git
+fi
+
+#
 # install d2dtracker.service
 #
 print_info "Copying d2dtracker.service to /etc/systemd/system/ " && sleep 1
