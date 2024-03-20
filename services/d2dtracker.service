@@ -6,7 +6,7 @@ After=network.target docker.service multi-user.target
 [Service]
 User=hunter
 Group=hunter
-ExecStart=/home/hunter/d2dtracker_jetson/services/d2d_service.sh
+ExecStart=/home/hunter/d2dtracker_jetson/services/d2d_service_docker_run.sh
 ExecStop=/usr/bin/docker stop d2dtracker-container
 
 [Install]
