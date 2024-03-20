@@ -17,6 +17,19 @@ sudo systemctl daemon-reload && sudo systemctl restart docker
 print_info "Install Git LFS in order to pull down all large files..."
 sleep 1
 
+sudo apt-get update && sudo apt-get install -y git python3-pip
+if [ ! -d "${HOME}/jetson-containers" ]; then
+    print_info "Cloning jetson-containers repo ..."
+    cd ${HOME} && git clone --depth=1 https://github.com/dusty-nv/jetson-containers
+else
+    cd ${HOME}/jetson-containers && git pull origin master
+fi
+print_info "Installing requirements of jetson-containers ..."
+sleep 1
+cd ${HOME}/jetson-containers
+pip3 install -r requirements.txt
+
+
 #
 # Setup the udev rules of Realsense camera
 #
@@ -53,7 +66,10 @@ FULL_IMAGE_NAME="$IMAGE_NAME:$TAG"
 #docker images | grep "$IMAGE_NAME" | grep "$TAG" > /dev/null 2>&1
 
 if [[ "$FORCE_BUILD" == "true" ]]; then
-	print_info "FORCE_BUILD: Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
+	print_info "FORCE_BUILD: Building ros2_humble+pytorch+torchvision docker layer"
+    cd ${HOME}/jetson-containers
+    ./build.sh --name=ros_humble_pytorch pytorch torchvision ros:humble-desktop
+    print_info "FORCE_BUILD: Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
 	cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
 else
 	# $? is a special variable that holds the exit status of the last command executed
@@ -66,11 +82,16 @@ else
 
 	    # Check if the pull was successful
 	    if docker pull $FULL_IMAGE_NAME; then
-		print_info "Successfully pulled $FULL_IMAGE_NAME"
+		    print_info "Successfully pulled $FULL_IMAGE_NAME"
 	    else
-		print_error "Failed to pull $FULL_IMAGE_NAME, building locally..."
-		print_info "Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
-		cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
+            print_error "Failed to pull $FULL_IMAGE_NAME, building locally..."
+            
+            print_info "Building ros2_humble+pytorch+torchvision docker layer"
+            cd ${HOME}/jetson-containers
+            ./build.sh --name=ros_humble_pytorch pytorch torchvision ros:humble-desktop
+
+            print_info "Building mzahana/d2dtracker-jetson:r${L4T_VERSION} ..."
+            cd $ROOT/docker && make d2dtracker-jetson L4TVER=${L4T_VERSION} UNAME="${USERNAME}" USER_ID=`id -u` U_GID=`id -g`
 	    fi
 	fi
 fi
@@ -182,11 +203,11 @@ if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/geographic_info" ];
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
     git clone -b 1.0.5 https://github.com/ros-geographic-info/geographic_info
 fi
-print_info "Cloning angles package ... " && sleep 1
-if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/angles" ]; then
-    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
-    git clone -b 1.15.0 https://github.com/ros/angles.git
-fi
+# print_info "Cloning angles package ... " && sleep 1
+# if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/angles" ]; then
+#     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+#     git clone -b 1.15.0 https://github.com/ros/angles.git
+# fi
 print_info "Cloning eigen_stl_containers package ... " && sleep 1
 if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/eigen_stl_containers" ]; then
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
@@ -245,6 +266,9 @@ print_info "Cloning apriltag_tools_ros package ... " && sleep 1
 if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/apriltag_tools_ros" ]; then
     cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
     git clone https://github.com/khaledgabr77/apriltag_tools_ros.git
+else
+    print_info "Pulling latest apriltag_tools_ros..."
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/apriltag_tools_ros && git pull origin main
 fi
 
 #

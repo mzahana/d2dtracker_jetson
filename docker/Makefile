@@ -9,7 +9,7 @@ all: d2dtracker-jetson openvins-jetson
 
 
 d2dtracker-jetson:
-	docker build --build-arg USER_GID=$(U_GID) --build-arg USER_UID=$(U_UID) --build-arg USERNAME=$(UNAME) --build-arg BASE_IMAGE="dustynv/ros:humble-pytorch-l4t-r$(L4TVER)" -t mzahana/d2dtracker-jetson:r$(L4TVER) . -f Dockerfile.d2dtracker
+	docker build --build-arg USER_GID=$(U_GID) --build-arg USER_UID=$(U_UID) --build-arg USERNAME=$(UNAME) --build-arg BASE_IMAGE="ros_humble_pytorch:l4t-r$(L4TVER)" -t mzahana/d2dtracker-jetson:r$(L4TVER) . -f Dockerfile.d2dtracker
 openvins-jetson:
 	docker build --build-arg USER_GID=$(U_GID) --build-arg USER_UID=$(U_UID) --build-arg USERNAME=$(UNAME) --build-arg BASE_IMAGE="dustynv/ros:humble-pytorch-l4t-r$(L4TVER)" -t mzahana/openvins-jetson:r$(L4TVER) . -f Dockerfile.openvins
 
