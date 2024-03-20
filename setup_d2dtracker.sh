@@ -300,6 +300,13 @@ print_info "Start d2dtracker.service using: sudo systemctl start d2dtracker.serv
 ######################## Done with copying d2dtracker.service ##############
 
 #
+# Copy rtps_udp_profile.xml
+#
+print_info "Copying $ROOT/docker/middleware_profiles/rtps_udp_profile.xml to $HOME/${CONTAINER_NAME}_shared_volume/ " && sleep 1
+cp $ROOT/docker/middleware_profiles/rtps_udp_profile.xml $HOME/${CONTAINER_NAME}_shared_volume/
+###########################
+
+#
 # Add udev rules for /dev/ttyUSB0 so MAVROS can use it
 #
 sudo cp $ROOT/docker/udev_rules/99-usb-serial.rules /etc/udev/rules.d/
