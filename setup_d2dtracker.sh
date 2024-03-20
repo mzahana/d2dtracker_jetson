@@ -281,6 +281,15 @@ if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/diagnostics" ]; the
 fi
 
 #
+# rqt_tf_tree 
+#
+print_info "Cloning rqt_tf_tree package ... " && sleep 1
+if [ ! -d "$HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src/rqt_tf_tree" ]; then
+    cd $HOME/${CONTAINER_NAME}_shared_volume/ros2_ws/src
+    git clone -b humble https://github.com/ros-visualization/rqt_tf_tree.git
+fi
+
+#
 # install d2dtracker.service
 #
 print_info "Copying d2dtracker.service to /etc/systemd/system/ " && sleep 1
