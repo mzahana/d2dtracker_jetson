@@ -287,6 +287,27 @@ RUN pip3 install future
 # Required for ultralytics
 RUN pip3 install lapx>=0.5.2
 
+#
+# Install osqp and osqpEigen. Needed for MPC and quadratic optimization
+#
+RUN cd / && \
+    git clone --recursive https://github.com/osqp/osqp.git && \
+    cd /osqp && git checkout 25b6b39 && \
+    git submodule update --recursive && \
+    cd /osqp && \
+    mkdir build && cd build && \
+    cmake -G "Unix Makefiles" .. && \
+    cmake --build . && \
+    cmake --build . --target install
+RUN cd / && git clone https://github.com/robotology/osqp-eigen.git && \
+    cd /osqp-eigen && git checkout v0.8.0 && \
+    cd /osqp-eigen && \
+    mkdir build && mkdir install && \
+    cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release ../ && \
+    make && make install
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
 # Setup non-root d2d user
 ARG USERNAME=d2d
 ARG USER_UID=1000
